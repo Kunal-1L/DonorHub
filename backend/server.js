@@ -9,10 +9,12 @@ const path = require("path");
 const multer = require("multer");
 const admin = require("firebase-admin");
 
-const FIREBASE_CREDENTIALS_PATH = process.env.FIREBASE_CREDENTIALS_PATH;
-const serviceAccount = require(FIREBASE_CREDENTIALS_PATH);
+// Load Firebase credentials from Base64 string
+const serviceAccount = JSON.parse(
+  Buffer.from(process.env.FIREBASE_CREDENTIALS_BASE64, "base64").toString("utf-8")
+);
 
-
+// Import models
 const {
   Users,
   UserProfile,
@@ -23,18 +25,24 @@ const {
   EmergencyBloodRequest,
 } = require("./model.js");
 
+// Load environment variables
 const DB_URI = process.env.DB_URI;
 const SECRET_KEY = process.env.SECRET_KEY;
 const LOCATIONIQ_API_KEY = process.env.LOCATIONIQ_API_KEY;
+
+// Initialize Firebase Admin
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
 // Connect to MongoDB
 mongoose
-  .connect(DB_URI)
+  .connect(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("✅ Connected to MongoDB"))
-  .catch((err) => console.error("❌ MongoDB Connection Error:", err));
+  .catch((err) => {
+    console.error("❌ MongoDB Connection Error:", err);
+    process.exit(1); // Exit if MongoDB connection fails
+  });
 
 const app = express();
 app.use(express.json());
