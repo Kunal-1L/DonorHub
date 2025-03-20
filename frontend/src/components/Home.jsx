@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import styles from "./Home.module.css";
 
 const images = [
-  "../public/transition1.jpeg",
-  "../public/transition2.jpeg",
-  "../public/transition3.jpeg",
+  "/transition1.jpeg",
+  "/transition2.jpeg",
+  "/transition3.jpeg",
 ];
 
 const Home = () => {
