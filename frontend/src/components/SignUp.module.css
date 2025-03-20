@@ -1,0 +1,67 @@
+.signup_container {
+  width: 320px;
+  margin: 50px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.container{
+  margin-top: 40px;
+  text-align: center;
+  padding: 40px;
+  background: #fff;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  background-image: linear-gradient(to bottom, rgb(255, 255, 255) 45%, #fcb69f 100%);
+}
+.signup_container h2 {
+  margin-bottom: 20px;
+}
+
+.signup_container input,
+.signup_container select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+  background-color: white;
+
+}
+
+.signup_container input:focus,
+.signup_container select:focus{
+  border-color: #d32f2f;
+  box-shadow: 0 0 5px rgba(211, 47, 47, 0.5);
+  outline: none; 
+}
+
+.signup_container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #ee4848;
+  color: white;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.signup_container option{
+  color:red;
+}
+
+.signup_container option:hover{
+  background-color: aqua;
+}
+.signup_container button:hover {
+  background-color: rgba(211, 47, 47, 0.5);
+}

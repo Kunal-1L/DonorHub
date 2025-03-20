@@ -1,0 +1,118 @@
+
+.slogan {
+  text-align: center;
+  opacity: 0;
+  animation: fadeIn 2s forwards;
+}
+
+.i1,
+.i2 {
+  font-size: 2.5rem; 
+  font-weight: 700; 
+  color: #d32f2f; 
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); 
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px); 
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px; 
+  position: relative;
+  overflow: hidden; 
+}
+
+.transitionImage {
+  width: 100%; 
+  height: 30rem;
+  opacity: 0;
+  animation: fadeImage 1.5s forwards;
+  border-radius: 8px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 70%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 70%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.slogans {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.slogans > div {
+  width: 10%;
+  height: auto;
+  min-height: 150px;
+  background-color: rgb(12, 11, 11);
+  margin: 5%;
+  padding: 5%;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(49, 31, 31, 0.2);
+  color: #d32f2f;
+  animation: fadeText 0.7s ease-in-out;
+  transition: transform 0.3s ease-in-out;
+  text-align: center;
+
+}
+
+.slogans > div:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(223, 2, 2, 0.589);
+  transition: transform 0.3s ease-in-out; 
+}
+
+@keyframes fadeText {
+  0% {
+      opacity: 0;
+      transform: translateY(20px); 
+  }
+  100% {
+      opacity: 1;
+      transform: translateY(0); 
+  }
+}
+@keyframes fadeImage {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .i1,
+  .i2 {
+    font-size: 2rem; 
+  }
+
+  .transitionImage {
+    width: 95%; 
+  }
+
+  .slogans > div{
+    width: 70%;
+  }
+}

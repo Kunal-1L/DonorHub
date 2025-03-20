@@ -1,0 +1,127 @@
+.profileContainer {
+  padding: 40px;
+  min-height: 60vh;
+  margin-top: 20px;
+  background-image: linear-gradient(to bottom, rgb(255, 255, 255) 45%, #fcb69f 100%);
+  font-size: 1.1rem;
+}
+
+
+.heading {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+p {
+  font-size: 16px;
+  margin: 8px 0;
+  color: #333;
+}
+
+strong {
+  color: #007bff;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+}
+
+
+.userTitle,
+.hospitalTitle {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.profileItem {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.label {
+  font-weight: 500;
+  margin-right: 15px;
+  min-width: 150px;
+  color: #333;
+}
+
+.value,
+.inputField,
+.selectField {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  box-sizing: border-box;
+  background-color: white;
+}
+
+.inputField,
+.selectField {
+  width: 100%;
+}
+
+.saveButton {
+  background-color: #e74c3c;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 25px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.saveButton:hover {
+  background-color: #c0392b;
+}
+
+.icon {
+  margin-right: 8px;
+  color: #e74c3c;
+}
+
+.autocompleteContainer {
+  position: relative;
+}
+
+.suggestionsList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 10;
+}
+
+.suggestionItem {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestionItem:hover {
+  background-color: #f0f0f0;
+}
+
+@media (max-width: 768px) {
+  
+
+  .label {
+    margin-right: 0px;
+  }
+}

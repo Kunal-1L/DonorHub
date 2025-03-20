@@ -1,0 +1,10 @@
+.footer{
+  height: 30vh;
+  background-color: rgb(201, 201, 201);
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 40px;
+  padding-top: 15vh;
+  box-sizing: border-box;
+  background: linear-gradient(to bottom, #fcb69f 0%, lightgrey 30%);
+}
