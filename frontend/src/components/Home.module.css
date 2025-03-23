@@ -60,7 +60,6 @@
 
 .slogans > div {
   width: 10%;
-  height: auto;
   min-height: 150px;
   background-color: rgb(12, 11, 11);
   margin: 5%;
@@ -111,6 +110,6 @@
   }
 
   .slogans > div{
-    width: 70%;
+    width: 60%;
   }
 }
