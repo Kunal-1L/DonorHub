@@ -7,12 +7,6 @@ const cors = require("cors");
 const axios = require("axios");
 const path = require("path");
 const multer = require("multer");
-const admin = require("firebase-admin");
-
-// Load Firebase credentials from Base64 string
-const serviceAccount = JSON.parse(
-  Buffer.from(process.env.FIREBASE_CREDENTIALS_BASE64, "base64").toString("utf-8")
-);
 
 // Import models
 const {
@@ -30,14 +24,11 @@ const DB_URI = process.env.DB_URI;
 const SECRET_KEY = process.env.SECRET_KEY;
 const LOCATIONIQ_API_KEY = process.env.LOCATIONIQ_API_KEY;
 
-// Initialize Firebase Admin
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
+
 
 // Connect to MongoDB
 mongoose
-  .connect(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(DB_URI)
   .then(() => console.log("✅ Connected to MongoDB"))
   .catch((err) => {
     console.error("❌ MongoDB Connection Error:", err);

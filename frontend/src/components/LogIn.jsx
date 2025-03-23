@@ -2,7 +2,6 @@ import styles from "./SignUp.module.css";
 import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { getToken, onMessage, messaging} from "../firebase"
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; 
 
@@ -13,72 +12,7 @@ const LogIn = () => {
   const [userData, setUserData] = useState(() => {
     return JSON.parse(sessionStorage.getItem("userData")) || null;
   });
-
-  const sendTokenToServer = async (token, userToken) => {
-    try {
-      const response = await axios.post(
-        `${API_BASE_URL}/save-token`,
-        { token },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${userToken}`,
-          },
-        }
-      );
-      console.log("Token saved:", response);
-    } catch (error) {
-      console.error("Error sending token to server:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (!userData) return; 
-
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/firebase-messaging-sw.js")
-        .then((registration) => {
-          console.log("Service Worker registered with scope:", registration.scope);
-
-          const requestNotificationPermission = async () => {
-            try {
-              const permission = await Notification.requestPermission();
-              if (permission === "granted") {
-                console.log("Notification permission granted.");
-                const currentToken = await getToken(messaging, {
-                  vapidKey:
-                    "BD29UF2RuYPquxtBekro8jads-q2ELLF3lRUxDF4OzoeAfRCZ927sGr-R25Z15FIPq_vYGlP_S6MRrPJGOTNi5M",
-                });
-
-                if (currentToken) {
-                  console.log("FCM registration token:", currentToken);
-                  sendTokenToServer(currentToken, userData.token);
-                } else {
-                  console.log("No registration token available.");
-                }
-              } else {
-                console.log("Unable to get permission to notify.");
-              }
-            } catch (error) {
-              console.error("Error retrieving token: ", error);
-            }
-          };
-
-          requestNotificationPermission();
-
-          onMessage(messaging, (payload) => {
-            console.log("Message received:", payload);
-            new Notification(payload.notification.title, {
-              body: payload.notification.body,
-            });
-          });
-        })
-        .catch((error) => {
-          console.error("Service Worker registration failed:", error);
-        });
-    }
-  }, [userData]); 
+ 
 
   const handleLoginClick = async (data) => {
     try {

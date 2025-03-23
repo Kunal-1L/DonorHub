@@ -9,12 +9,9 @@
 }
 
 .container{
-  margin-top: 40px;
   text-align: center;
   padding: 40px;
   background: #fff;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   background-image: linear-gradient(to bottom, rgb(255, 255, 255) 45%, #fcb69f 100%);
 }

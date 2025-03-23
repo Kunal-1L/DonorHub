@@ -50,7 +50,6 @@
   justify-content: space-between;
   padding: 40px;
   background: linear-gradient(to right, #ff6b6b, #ff4757);
-  border-radius: 20px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease-in-out;
 }
@@ -64,8 +63,20 @@
   border-radius: 20px;
   box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease-in-out;
+  animation: rotate 1s ease 1s;
 }
 
+@keyframes rotate {
+  0%{
+    transform: rotate(-1deg);
+    scale: 1.02;
+  }
+  
+  100%{
+    transform: rotate(-3deg);
+    scale:1.06;
+  }
+}
 .top_left img:hover {
   transform: rotate(-3deg) scale(1.05);
 }

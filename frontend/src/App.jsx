@@ -12,7 +12,7 @@ import Footer from "./components/Footer";
 function App() {
   
   return (
-    <div style={{ padding: "2rem" }}>
+    <div >
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />

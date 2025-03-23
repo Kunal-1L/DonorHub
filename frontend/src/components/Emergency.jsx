@@ -83,6 +83,7 @@ const Emergency = () => {
   };
 
   return (
+    <div className={styles.container}>
     <div className={styles.drive_post_cont}>
       <h1 className={styles.heading}>Emergency Blood Request</h1>
       <form onSubmit={handleSubmit} className={styles.formContainer}>
@@ -155,7 +156,7 @@ const Emergency = () => {
           Submit Request
         </button>
       </form>
-    </div>
+    </div></div>
   );
 };
 
