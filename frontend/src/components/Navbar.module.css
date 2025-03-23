@@ -172,7 +172,9 @@
   .navbar {
     flex-wrap: wrap;
   }
-
+  .logo img{
+    margin-bottom: 10px;
+  }
   .navLinks {
     display: none;
     flex-direction: column;
