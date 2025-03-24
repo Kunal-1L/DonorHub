@@ -55,8 +55,15 @@ mongoose
   });
 
 const app = express();
+
+const corsOptions = {
+  origin: 'https://donor-n2t9bcerv-kunals-projects-52987a45.vercel.app', 
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+
 app.use(express.json());
-app.use(cors());
 
 // JWT Middleware
 const verifyToken = (req, res, next) => {
