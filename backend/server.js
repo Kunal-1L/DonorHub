@@ -7,24 +7,24 @@ const cors = require("cors");
 const axios = require("axios");
 const path = require("path");
 const multer = require("multer");
-const admin = require('firebase-admin');
+const admin = require("firebase-admin");
 
 const serviceAccount = {
-  "type": process.env.FIREBASE_TYPE,
-  "project_id": process.env.FIREBASE_PROJECT_ID,
-  "private_key_id": process.env.FIREBASE_PRIVATE_KEY_ID,
-  "private_key": process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-  "client_email": process.env.FIREBASE_CLIENT_EMAIL,
-  "client_id": process.env.FIREBASE_CLIENT_ID,
-  "auth_uri": process.env.FIREBASE_AUTH_URI,
-  "token_uri": process.env.FIREBASE_TOKEN_URI,
-  "auth_provider_x509_cert_url": process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
-  "client_x509_cert_url": process.env.FIREBASE_CLIENT_X509_CERT_URL,
-  "universe_domain": process.env.FIREBASE_UNIVERSE_DOMAIN
+  type: process.env.FIREBASE_TYPE,
+  project_id: process.env.FIREBASE_PROJECT_ID,
+  private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
+  private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+  client_email: process.env.FIREBASE_CLIENT_EMAIL,
+  client_id: process.env.FIREBASE_CLIENT_ID,
+  auth_uri: process.env.FIREBASE_AUTH_URI,
+  token_uri: process.env.FIREBASE_TOKEN_URI,
+  auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
+  client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
+  universe_domain: process.env.FIREBASE_UNIVERSE_DOMAIN,
 };
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(serviceAccount),
 });
 
 // Import models
@@ -43,8 +43,6 @@ const DB_URI = process.env.DB_URI;
 const SECRET_KEY = process.env.SECRET_KEY;
 const LOCATIONIQ_API_KEY = process.env.LOCATIONIQ_API_KEY;
 
-
-
 // Connect to MongoDB
 mongoose
   .connect(DB_URI)
@@ -57,7 +55,18 @@ mongoose
 const app = express();
 
 const corsOptions = {
-  origin: 'https://donor-n2t9bcerv-kunals-projects-52987a45.vercel.app', 
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      "https://donor-hub-eight.vercel.app",
+      "http://localhost:5173",
+    ];
+
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   optionsSuccessStatus: 200,
 };
 
@@ -113,7 +122,10 @@ app.get("/location-suggestions", async (req, res) => {
   }
 
   if (!q || q.trim().length < 2) {
-    return res.status(400).json({ error: "Query parameter 'q' is required and must be at least 2 characters long" });
+    return res.status(400).json({
+      error:
+        "Query parameter 'q' is required and must be at least 2 characters long",
+    });
   }
 
   try {
@@ -135,13 +147,13 @@ app.get("/location-suggestions", async (req, res) => {
 
     res.json(response.data);
   } catch (error) {
-    console.error("Error fetching LocationIQ suggestions:", error.response?.data || error.message);
+    console.error(
+      "Error fetching LocationIQ suggestions:",
+      error.response?.data || error.message
+    );
     res.status(500).json({ error: "Error fetching location suggestions" });
   }
 });
-
-
-
 
 // Signup Route
 app.post("/signup", async (req, res) => {
@@ -248,8 +260,8 @@ app.get("/get-profile", verifyToken, async (req, res) => {
   try {
     const user_id = req.user_id;
     var pro = await UserProfile.findOne({ user_id });
-    if(!pro){
-      pro = await HospitalProfile.findOne({user_id});
+    if (!pro) {
+      pro = await HospitalProfile.findOne({ user_id });
     }
     res
       .status(201)
@@ -359,7 +371,7 @@ app.post("/donor-registration", verifyToken, async (req, res) => {
         await camp.save();
       } else {
         res.status(200).json({ message: "You are already registered..." });
-        return; 
+        return;
       }
     }
 
@@ -418,7 +430,7 @@ app.post(
     try {
       const info = {
         user_id: req.user_id,
-        bloodType: req.body.bloodType,
+        bloodGroup: req.body.bloodGroup,
         location: req.body.location,
         contact: {
           contactEmail: req.body.contactEmail,
@@ -428,7 +440,7 @@ app.post(
         medicalDoc: req.file.path,
       };
 
-      console.log(info);
+      console.log("Emergency Request Info:", info);
 
       const emergencyRequest = new EmergencyBloodRequest(info);
       await emergencyRequest.save();
@@ -440,60 +452,85 @@ app.post(
           return res.status(404).json({ message: "User profile not found." });
       }
 
-      const userLat = userProfile.latitude;
-      const userLon = userProfile.longitude;
-
-      const availableUsers = await UserProfile.find({
-        user_id: { $ne: req.user_id },
-      });
-
-      const nearbyUsers = availableUsers.filter((user) => {
-        const distance = getDistanceFromLatLon(
-          userLat,
-          userLon,
-          user.latitude,
-          user.longitude
+      const { location } = req.body;
+      try {
+        const response = await axios.get(
+          `https://us1.locationiq.com/v1/search.php`,
+          {
+            params: { key: LOCATIONIQ_API_KEY, q: location, format: "json" },
+          }
         );
-        return distance <= 10 && user.bloodType == info.bloodType;
-      });
 
-      const nearbyUserIds = nearbyUsers.map((user) => user.user_id);
-      const tokens = await NotificationTokens.find({
-        user_id: { $in: nearbyUserIds },
-      });
-
-      const notificationTitle = "Emergency Blood Request!";
-      const notificationBody = `A blood request has been made near you.`;
-      const notificationData = {
-        location: req.body.location,
-        bloodType: req.body.bloodType,
-      };
-      console.log("Tokens: ", tokens);
-      const notificationPromises = tokens.map(async (token) => {
-        try {
-          const response = await sendNotification(
-            token.token,
-            notificationTitle,
-            notificationBody,
-            notificationData
-          );
-          console.log(
-            `Notification sent to ${token.user_id} (${token.token}): ${JSON.stringify(
-              response
-            )}`
-          );
-          return response;
-        } catch (error) {
-          console.error(
-            `Error sending notification to ${token.user_id} (${token.token}):`,
-            error
-          );
-          return null;
+        if (response.data.length === 0) {
+          return res.status(404).json({ message: "Location not found." });
         }
-      });
 
-      await Promise.all(notificationPromises);
-      res.status(201).json({ message: "Uploaded Successfully...." });
+        const { lat: userLat, lon: userLon } = response.data[0];
+        console.log("Fetched Coordinates (Requester):", { userLat, userLon });
+
+        const availableUsers = await UserProfile.find({
+          user_id: { $ne: req.user_id },
+        });
+
+        const nearbyUsers = availableUsers.filter((user) => {
+          const distance = getDistanceFromLatLon(
+            userLat,
+            userLon,
+            user.latitude,
+            user.longitude
+          );
+          return distance <= 10 && user.bloodGroup == info.bloodGroup;
+        });
+
+        console.log("Nearby Users:", nearbyUsers);
+
+        const nearbyUserIds = nearbyUsers.map((user) => user.user_id);
+        const tokens = await NotificationTokens.find({
+          user_id: { $in: nearbyUserIds },
+        });
+
+        const notificationTitle = "Emergency Blood Request!";
+        const notificationBody = `A blood request has been made near you.`;
+        const notificationData = {
+          location: req.body.location,
+          bloodGroup: req.body.bloodGroup,
+        };
+        console.log("Tokens: ", tokens);
+        const notificationPromises = tokens.map(async (token) => {
+          try {
+            const response = await sendNotification(
+              token.token,
+              notificationTitle,
+              notificationBody,
+              notificationData
+            );
+            console.log(
+              `Notification sent to ${token.user_id} (${
+                token.token
+              }): ${JSON.stringify(response)}`
+            );
+            return response;
+          } catch (error) {
+            console.error(
+              `Error sending notification to ${token.user_id} (${token.token}):`,
+              error
+            );
+            return null;
+          }
+        });
+
+        await Promise.all(notificationPromises);
+        res.status(201).json({ message: "Uploaded Successfully...." });
+      } catch (locationError) {
+        console.error(
+          "Error fetching coordinates from LocationIQ:",
+          locationError
+        );
+        return res.status(500).json({
+          message: "Error fetching location coordinates",
+          error: locationError.message,
+        });
+      }
     } catch (error) {
       console.error("Emergency Push Error:", error);
       res.status(500).json({ message: "Server Error", error: error.message });

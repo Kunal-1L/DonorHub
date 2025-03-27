@@ -12,7 +12,7 @@ const Emergency = () => {
       navigate('/login');
       return;
   }
-  const bloodTypeRef = useRef();
+  const bloodGroupRef = useRef();
   const contactNameRef = useRef();
   const contactPhoneRef = useRef();
   const contactEmailRef = useRef();
@@ -48,7 +48,7 @@ const Emergency = () => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("bloodType", bloodTypeRef.current.value);
+    formData.append("bloodGroup", bloodGroupRef.current.value);
     formData.append("location", locationRef.current.value);
     formData.append("contactName", contactNameRef.current.value);
     formData.append("contactPhone", contactPhoneRef.current.value);
@@ -88,7 +88,7 @@ const Emergency = () => {
       <h1 className={styles.heading}>Emergency Blood Request</h1>
       <form onSubmit={handleSubmit} className={styles.formContainer}>
         <label className={styles.label}>Blood Type:</label>
-        <select ref={bloodTypeRef} required className={styles.input}>
+        <select ref={bloodGroupRef} required className={styles.input}>
           <option value="">Select Blood Type</option>
           <option value="A+">A+</option>
           <option value="A-">A-</option>

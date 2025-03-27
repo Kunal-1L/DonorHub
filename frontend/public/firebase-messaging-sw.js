@@ -16,11 +16,13 @@ const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(function (payload) {
   console.log("[firebase-messaging-sw.js] Received background message ", payload);
+  console.log("Payload Data:", payload.data); 
 
-  const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-        body: payload.notification.body,
-        icon: payload.notification.icon,
-    };
+  const notificationTitle = "New Emergency Blood Request!";
+  const notificationOptions = {
+    body: `Location: ${payload.data.location}, Blood Type: ${payload.data.bloodType}`,
+    icon: '/firebase-logo.png',
+  };
+
   return self.registration.showNotification(notificationTitle, notificationOptions);
 });

@@ -105,7 +105,7 @@ const NotificationTokens = mongoose.model("NotificationTokens", NotificationToke
 
 const EmergencyBloodRequestSchema = new mongoose.Schema({
   user_id: { type: String, required: true },
-  bloodType: { type: String, required: true },
+  bloodGroup: { type: String, required: true },
   location: { type: String, required: true },
   contact: {
     contactName: { type: String, required: true },
