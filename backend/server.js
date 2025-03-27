@@ -57,7 +57,18 @@ mongoose
 const app = express();
 
 const corsOptions = {
-  origin: 'https://donor-n2t9bcerv-kunals-projects-52987a45.vercel.app', 
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      "https://donor-hub-eight.vercel.app",
+      "http://localhost:5173",
+    ];
+
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   optionsSuccessStatus: 200,
 };
 
