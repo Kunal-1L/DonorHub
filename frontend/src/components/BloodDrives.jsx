@@ -4,6 +4,7 @@ import styles from "./BloodDrives.module.css";
 import { useNavigate } from "react-router-dom";
 import Loading from "./Loading";
 import { toast } from "react-toastify";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const BloodDrives = () => {
@@ -53,6 +54,8 @@ const BloodDrives = () => {
   const handleOutsideClick = (event) => {
     if (divRef1.current && !divRef1.current.contains(event.target)) {
       document.getElementById("drive-details").innerHTML = "";
+      document.getElementById("drive-details").className = "";
+      document.getElementById("drive-details").style = "";
       setIsDriveDetailsVisible(false);
     }
   };
@@ -76,12 +79,17 @@ const BloodDrives = () => {
     return <Loading />;
   }
 
-  const handleDriveClick = (index) => {
+  const handleDriveClick = (index, event) => {
     const drive = drives[index];
-    const container = document.getElementById("drive-details");
-    if (container) {
-      container.innerHTML = `
-        <h2>${drive.title}</h2>
+    const detailsContainer = document.getElementById("drive-details");
+    const clickY = event.clientY;
+
+    if (detailsContainer) {
+      console.log(drive);
+      detailsContainer.innerHTML = `
+        <h2>${drive.title}
+       <span id="close_button">\u00D7</span>
+        </h2>
         <p><strong>Organizer:</strong> ${drive.organizer}</p>
         <p><strong>Location:</strong> ${drive.location}</p>
         <p><strong>Date:</strong> ${new Date(
@@ -109,10 +117,17 @@ const BloodDrives = () => {
             : ""
         }
       `;
-    }
-    setIsDriveDetailsVisible(true);
-  };
+      detailsContainer.className = styles.drive_details;
+      detailsContainer.style.top = `${clickY + 10}px`;
+      const closeButton = document.getElementById("close_button");
 
+      if (closeButton) {
+        closeButton.onclick = () => handleOutsideClick(event);
+      }
+
+      setIsDriveDetailsVisible(true);
+    }
+  };
   const handleRegistration = async (event, index) => {
     event.stopPropagation();
     try {
@@ -173,7 +188,7 @@ const BloodDrives = () => {
           <div
             key={index}
             className={styles.drive}
-            onClick={() => handleDriveClick(index)}
+            onClick={() => handleDriveClick(index, event)}
           >
             <div className={styles.poster}>
               <img src={drive.poster} alt="Drive Poster" />
@@ -197,16 +212,16 @@ const BloodDrives = () => {
                 Register
               </button>
             )}
-            <div
-              ref={divRef1}
-              id="drive-details"
-              className={isDriveDetailsVisible ? styles.drive_details : ""}
-            ></div>
           </div>
         ))
       ) : (
         <p>No blood drives available.</p>
       )}
+      {
+        <div ref={divRef1} id="drive-details">
+          {/* Content will be populated here by handleDriveClick */}
+        </div>
+      }
     </div>
   );
 };
