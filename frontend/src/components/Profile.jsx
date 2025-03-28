@@ -11,8 +11,8 @@ import {
   faPhone,
   faSave,
 } from "@fortawesome/free-solid-svg-icons";
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // Vite environment variable
+import { toast } from "react-toastify";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -29,39 +29,36 @@ const Profile = () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/get-profile`, {
           headers: {
-            Authorization: `Bearer ${userData.token}`, 
+            Authorization: `Bearer ${userData.token}`,
           },
         });
-        setProfile(response.data.profile); 
+        setProfile(response.data.profile);
       } catch (error) {
-        console.error("Error fetching profile:", error);
+        toast.error("Error fetching profile");
       }
     };
 
     if (userData?.profile_completed) {
       getProfile();
     }
-  }, []); 
+  }, []);
 
-  console.log(profile); 
-  const handleLocationChange = async(e) => {
+  const handleLocationChange = async (e) => {
     const inputValue = e.target.value;
     setLocation(inputValue);
 
     if (inputValue.length > 2) {
-          try {
-            const response = await axios.get(
-              `${API_BASE_URL}/location-suggestions?q=${inputValue}`
-            );
-            setSuggestions(response.data || []);
-          } catch (error) {
-            console.error("Error fetching autocomplete suggestions:", error);
-            setSuggestions([]); 
-          }
-        } else {
-          setSuggestions([]);
-        }
-      
+      try {
+        const response = await axios.get(
+          `${API_BASE_URL}/location-suggestions?q=${inputValue}`
+        );
+        setSuggestions(response.data || []);
+      } catch (error) {
+        setSuggestions([]);
+      }
+    } else {
+      setSuggestions([]);
+    }
   };
 
   const handleSuggestionClick = (suggestion) => {
@@ -78,7 +75,6 @@ const Profile = () => {
       location: locationRef.current?.value || "",
     };
     const token = JSON.parse(sessionStorage.getItem("userData")).token;
-    console.log(profileData);
     try {
       const response = await axios.post(
         `${API_BASE_URL}/profile`,
@@ -91,16 +87,16 @@ const Profile = () => {
         }
       );
 
-      if (response.status >= 200 && response.status < 300) {
-        alert("Profile saved successfully!");
+      if (response.status === 200) {
+        toast.success("Profile saved successfully");
         userData.profile_completed = true;
         sessionStorage.setItem("userData", JSON.stringify(userData));
         navigate("/");
       } else {
-        alert("Error saving profile.");
+        toast.error("Error saving profile.");
       }
     } catch (error) {
-      console.error("Error submitting profile:", error);
+      toast.error("Error submitting profile");
     }
   };
 
@@ -200,16 +196,28 @@ const Profile = () => {
         <FontAwesomeIcon icon={faSave} /> Save Changes
       </button>
     </div>
-  ) : (
-    profile  ? <div className={styles.childProfile}>
+  ) : profile ? (
+    <div className={styles.childProfile}>
       <div className={styles.profileContainer}>
-      <h2 className={styles.heading}>User Profile</h2>
-      <p><strong>Name:</strong> {profile.name}</p>
-      <p><strong>Email:</strong> {profile.user_id}</p>
-      <p><strong>Phone:</strong> {profile.phone}</p>
-      <p><strong>Location:</strong> {profile.location}</p>
+        <h2 className={styles.heading}>User Profile</h2>
+        <p>
+          <strong>Name:</strong> {profile.name}
+        </p>
+        <p>
+          <strong>Email:</strong> {profile.user_id}
+        </p>
+        <p>
+          <strong>Phone:</strong> {profile.phone}
+        </p>
+        <p>
+          <strong>Location:</strong> {profile.location}
+        </p>
+      </div>
     </div>
-    </div> : <div><Loading /></div>
+  ) : (
+    <div>
+      <Loading />
+    </div>
   );
 };
 

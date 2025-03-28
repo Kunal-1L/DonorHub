@@ -8,12 +8,16 @@
   background-color: white;
 }
 
-.container{
+.container {
   text-align: center;
   padding: 40px;
   background: #fff;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  background-image: linear-gradient(to bottom, rgb(255, 255, 255) 45%, #fcb69f 100%);
+  background-image: linear-gradient(
+    to bottom,
+    rgb(255, 255, 255) 45%,
+    #fcb69f 100%
+  );
 }
 
 .heading {

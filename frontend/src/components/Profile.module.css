@@ -2,10 +2,13 @@
   padding: 40px;
   min-height: 60vh;
   margin-top: 20px;
-  background-image: linear-gradient(to bottom, rgb(255, 255, 255) 45%, #fcb69f 100%);
+  background-image: linear-gradient(
+    to bottom,
+    rgb(255, 255, 255) 45%,
+    #fcb69f 100%
+  );
   font-size: 1.1rem;
 }
-
 
 .heading {
   font-size: 24px;
@@ -29,7 +32,6 @@ strong {
   font-size: 18px;
   color: #666;
 }
-
 
 .userTitle,
 .hospitalTitle {
@@ -119,8 +121,6 @@ strong {
 }
 
 @media (max-width: 768px) {
-  
-
   .label {
     margin-right: 0px;
   }

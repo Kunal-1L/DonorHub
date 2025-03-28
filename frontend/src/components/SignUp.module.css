@@ -13,7 +13,11 @@
   padding: 40px;
   background: #fff;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  background-image: linear-gradient(to bottom, rgb(255, 255, 255) 45%, #fcb69f 100%);
+  background-image: linear-gradient(
+    to bottom,
+    rgb(255, 255, 255) 45%,
+    #fcb69f 100%
+  );
 }
 
 .signup_container h2 {
@@ -67,17 +71,17 @@
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
   .signup_container {
-    width: 80%; 
-    max-width: none; 
-    margin: 20px auto; 
+    width: 80%;
+    max-width: none;
+    margin: 20px auto;
   }
 
   .container {
-    padding: 20px; 
+    padding: 20px;
   }
 
   .signup_container h2 {
-    font-size: 1.5rem; 
+    font-size: 1.5rem;
   }
 
   .signup_container input,
@@ -86,4 +90,3 @@
     font-size: 1rem;
   }
 }
-

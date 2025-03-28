@@ -5,13 +5,13 @@ import styles from "./Navbar.module.css";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false); 
+  const [profileOpen, setProfileOpen] = useState(false);
   const navigate = useNavigate();
   const userData = JSON.parse(sessionStorage.getItem("userData"));
 
   const handleLogOut = () => {
-    sessionStorage.removeItem("userData");  
-    navigate("/"); 
+    sessionStorage.removeItem("userData");
+    navigate("/");
   };
 
   return (
@@ -38,20 +38,27 @@ const Navbar = () => {
       </ul>
 
       {userData ? (
-        <div className={styles.profile} onClick={() => setProfileOpen(!profileOpen)}>
+        <div
+          className={styles.profile}
+          onClick={() => setProfileOpen(!profileOpen)}
+        >
           <img src="./people.png" alt="Profile" />
           {profileOpen && (
-            <div className={styles.profileDropdown}> 
+            <div className={styles.profileDropdown}>
               <div onClick={() => navigate("/profile")}>My Profile</div>
               <div>Donor Calls</div>
-              <div onClick={handleLogOut}>Log Out</div> 
+              <div onClick={handleLogOut}>Log Out</div>
             </div>
           )}
         </div>
       ) : (
         <div className={styles.authButtons}>
-          <Link to="/signup" className={styles.signup}>Sign Up</Link>
-          <Link to="/login" className={styles.login}>Log In</Link>
+          <Link to="/signup" className={styles.signup}>
+            Sign Up
+          </Link>
+          <Link to="/login" className={styles.login}>
+            Log In
+          </Link>
         </div>
       )}
 
@@ -60,7 +67,11 @@ const Navbar = () => {
         onClick={() => setMenuOpen(!menuOpen)}
         aria-label="Toggle Menu"
       >
-        {menuOpen ? <FaTimes color="#d43217" size={24} /> : <FaBars size={24} />}
+        {menuOpen ? (
+          <FaTimes color="#d43217" size={24} />
+        ) : (
+          <FaBars size={24} />
+        )}
       </button>
     </nav>
   );

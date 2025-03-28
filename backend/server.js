@@ -97,7 +97,6 @@ const verifyToken = (req, res, next) => {
 
 app.get("/location-suggestions", async (req, res) => {
   const { q } = req.query;
-  console.log(q);
   if (!LOCATIONIQ_API_KEY) {
     return res.status(500).json({ error: "LocationIQ API key not configured" });
   }
@@ -146,7 +145,7 @@ app.post("/signup", async (req, res) => {
     const hash_pwd = await bcrypt.hash(password, 10);
     const user = new Users({ user_id, password: hash_pwd, role });
     await user.save();
-    res.status(201).json({ message: `${role} registered successfully` });
+    res.status(200).json({ message: `${role} registered successfully` });
   } catch (error) {
     console.error("Signup Error:", error);
     res.status(500).json({ message: "Server error", error: error.message });
@@ -165,7 +164,7 @@ app.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign({ user_id, user_role: user.role }, SECRET_KEY, {
-      expiresIn: "1h",
+      expiresIn: "5h",
     });
 
     res.status(200).json({
@@ -214,7 +213,7 @@ app.post("/profile", verifyToken, async (req, res) => {
         { $set: { profile_completed: true } }
       );
       await profile.save();
-      res.status(201).json({ message: "User Profile Created", profile });
+      res.status(200).json({ message: "User Profile Created", profile });
     } else {
       const profile = new HospitalProfile({
         user_id: req.user_id,
@@ -229,7 +228,7 @@ app.post("/profile", verifyToken, async (req, res) => {
         { user_id: req.user_id },
         { $set: { profile_completed: true } }
       );
-      res.status(201).json({ message: "Hospital Profile Created", profile });
+      res.status(200).json({ message: "Hospital Profile Created", profile });
     }
   } catch (error) {
     console.error("Profile Creation Error:", error);
@@ -245,7 +244,7 @@ app.get("/get-profile", verifyToken, async (req, res) => {
       pro = await HospitalProfile.findOne({ user_id });
     }
     res
-      .status(201)
+      .status(200)
       .json({ message: "Profile Fetched Successfully", profile: pro });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
@@ -329,7 +328,7 @@ app.post("/post-drive", verifyToken, async (req, res) => {
       longitude: lon,
     });
     await user.save();
-    res.status(201).json({ message: "Perfectly Posted" });
+    res.status(200).json({ message: "Perfectly Posted" });
   } catch (error) {
     res.status(500).json({ message: "Failed to Post", error: error.message });
   }
@@ -337,7 +336,6 @@ app.post("/post-drive", verifyToken, async (req, res) => {
 
 app.post("/donor-registration", verifyToken, async (req, res) => {
   const { driveId, donorId } = req.body;
-  console.log(req.body);
   try {
     let camp = await DonorRegistration.findOne({ driveId });
 
@@ -373,7 +371,7 @@ app.post("/save-token", verifyToken, async (req, res) => {
       { $set: { token: token } },
       { new: true, upsert: true }
     );
-    res.status(201).json({ message: "Successfully done" });
+    res.status(200).json({ message: "Successfully done" });
   } catch (error) {
     console.error("Error saving token:", error);
     res.status(500).json({ message: "Failed to save", error: error.message });
@@ -381,7 +379,6 @@ app.post("/save-token", verifyToken, async (req, res) => {
 });
 
 sendNotification = async (deviceToken, title, body, data) => {
-  console.log(deviceToken, title, body, data);
   const message = {
     notification: {
       title: title,
@@ -391,11 +388,8 @@ sendNotification = async (deviceToken, title, body, data) => {
     token: deviceToken,
   };
 
-  console.log(message);
-
   try {
     const response = await admin.messaging().send(message);
-    console.log("Successfully sent message:", response);
     return response;
   } catch (error) {
     console.error("Error sending message:", error);
@@ -407,8 +401,6 @@ app.post(
   "/emergency-push",
   verifyToken,
   async (req, res) => {
-    console.log(req.body);
-
     try {
       const info = {
         user_id: req.user_id,
@@ -421,8 +413,6 @@ app.post(
         },
         medicalDoc: req.body.medicalDoc,
       };
-
-      console.log("Emergency Request Info:", info);
 
       const emergencyRequest = new EmergencyBloodRequest(info);
       await emergencyRequest.save();
@@ -448,7 +438,7 @@ app.post(
         }
 
         const { lat: userLat, lon: userLon } = response.data[0];
-        console.log("Fetched Coordinates (Requester):", { userLat, userLon });
+     
 
         const availableUsers = await UserProfile.find({
           user_id: { $ne: req.user_id },
@@ -464,8 +454,6 @@ app.post(
           return distance <= 10 && user.bloodGroup == info.bloodGroup;
         });
 
-        console.log("Nearby Users:", nearbyUsers);
-
         const nearbyUserIds = nearbyUsers.map((user) => user.user_id);
         const tokens = await NotificationTokens.find({
           user_id: { $in: nearbyUserIds },
@@ -474,7 +462,6 @@ app.post(
         const notificationTitle = "Emergency Blood Request!";
         const notificationBody = `A blood request has been made near you. Location: ${info.location}, Blood Type: ${info.bloodGroup}`; 
 
-        console.log("Tokens: ", tokens);
         const notificationPromises = tokens.map(async (token) => {
           try {
             const response = await sendNotification(
@@ -482,11 +469,6 @@ app.post(
               notificationTitle,
               notificationBody,
               { location: info.location, bloodGroup: info.bloodGroup }
-            );
-            console.log(
-              `Notification sent to ${token.user_id} (${
-                token.token
-              }): ${JSON.stringify(response)}`
             );
             return response;
           } catch (error) {
@@ -499,7 +481,7 @@ app.post(
         });
 
         await Promise.all(notificationPromises);
-        res.status(201).json({ message: "Uploaded Successfully...." });
+        res.status(200).json({ message: "Uploaded Successfully...." });
       } catch (locationError) {
         console.error(
           "Error fetching coordinates from LocationIQ:",

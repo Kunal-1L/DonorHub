@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Home.module.css";
 
-const images = [
-  "/transition1.jpeg",
-  "/transition2.jpeg",
-  "/transition3.jpeg",
-];
+const images = ["/transition1.jpeg", "/transition2.jpeg", "/transition3.jpeg"];
 
 const Home = () => {
   const [showImages, setShowImages] = useState(false);
@@ -14,7 +10,7 @@ const Home = () => {
   useEffect(() => {
     const sloganTimeout = setTimeout(() => {
       setShowImages(true);
-    }, 2000); // Delay of 2 seconds
+    }, 2000);
 
     return () => clearTimeout(sloganTimeout);
   }, []);
@@ -23,7 +19,7 @@ const Home = () => {
     if (showImages) {
       const interval = setInterval(() => {
         setCurrentImage((prevIndex) => (prevIndex + 1) % images.length);
-      }, 3000); // Transition every 3 seconds
+      }, 3000);
 
       return () => clearInterval(interval);
     }
@@ -58,7 +54,8 @@ const Home = () => {
   return (
     <div
       style={{
-        backgroundImage: "linear-gradient(to bottom,rgb(255, 255, 255) 45%, #fcb69f 100%)",
+        backgroundImage:
+          "linear-gradient(to bottom,rgb(255, 255, 255) 45%, #fcb69f 100%)",
       }}
     >
       {showImages && (

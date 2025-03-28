@@ -19,12 +19,10 @@ const messaging = getMessaging(app);
 export const generateToken = async () => {
     try {
         const permission = await Notification.requestPermission();
-        console.log(permission);
         if (permission === "granted") {
             const token = await getToken(messaging, {
               vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
             });
-            console.log(token);
             return token;
         }
     } catch (error) {

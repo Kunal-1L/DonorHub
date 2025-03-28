@@ -3,8 +3,8 @@ import axios from "axios";
 import styles from "./BloodDrives.module.css";
 import { useNavigate } from "react-router-dom";
 import Loading from "./Loading";
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // Vite environment variable
+import { toast } from "react-toastify";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const BloodDrives = () => {
   const [drives, setDrives] = useState([]);
@@ -12,7 +12,6 @@ const BloodDrives = () => {
   const userData = JSON.parse(sessionStorage.getItem("userData"));
   const divRef1 = useRef();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [isDriveDetailsVisible, setIsDriveDetailsVisible] = useState(false);
 
   if (!userData) {
@@ -27,20 +26,27 @@ const BloodDrives = () => {
           },
         });
 
-        if (response.status >= 200 && response.status < 300) {
-          console.log(response.data.drives);
+        if (response.status === 200) {
           setDrives(response.data.drives);
-        } else {
-          setError("Server Error");
         }
       } catch (error) {
-        console.error("Error fetching blood drives:", error);
-        setError("Failed to fetch blood drives.");
+        let errorMessage = "Failed to fetch blood drives.";
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
+          errorMessage = error.response.data.message;
+        } else if (error.request) {
+          errorMessage = "Network Error: Could not connect to the server.";
+        } else {
+          errorMessage += ": " + error.message;
+        }
+        toast.error(errorMessage);
       } finally {
         setLoading(false);
       }
     };
-
     fetchBloodDrives();
   }, [userData?.token]);
 
@@ -67,11 +73,7 @@ const BloodDrives = () => {
   };
 
   if (loading) {
-    return <Loading />
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
+    return <Loading />;
   }
 
   const handleDriveClick = (index) => {
@@ -112,7 +114,7 @@ const BloodDrives = () => {
   };
 
   const handleRegistration = async (event, index) => {
-    event.stopPropagation(); // Stop event bubbling
+    event.stopPropagation();
     try {
       const registrationReq = {
         driveId: drives[index]._id.toString(),
@@ -127,26 +129,39 @@ const BloodDrives = () => {
           },
         }
       );
-      console.log(response.data);
-      alert(response.data.message);
-      navigate('/why-donate')
+      toast.success(response.data.message);
+      navigate("/why-donate");
     } catch (error) {
-      console.error("Registration error:", error);
+      let errorMessage = "Registration error";
+
+      if (error.response) {
+        if (error.response.data && error.response.data.message) {
+          errorMessage = error.response.data.message;
+        }
+      } else if (error.request) {
+        errorMessage = "Network Error: Could not connect to the server.";
+      } else {
+        errorMessage += ": " + error.message;
+      }
+      toast.error(errorMessage);
     }
   };
 
-  const handleEmergencyClick = ()=>{
+  const handleEmergencyClick = () => {
     if (!userData) {
       navigate("/login");
       return;
     }
     navigate("/emergency-call");
-  }
+  };
   return (
-    <div className={styles.drive_container} style={{
-      backgroundImage:
-        "linear-gradient(to bottom,rgb(255, 255, 255) 25%,to #fcb69f 100%)",
-    }}>
+    <div
+      className={styles.drive_container}
+      style={{
+        backgroundImage:
+          "linear-gradient(to bottom,rgb(255, 255, 255) 25%,to #fcb69f 100%)",
+      }}
+    >
       <button className={styles.post_btn} onClick={handlePostClick}>
         Post Blood Drive
       </button>

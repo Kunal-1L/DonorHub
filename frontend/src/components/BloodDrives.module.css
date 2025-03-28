@@ -2,7 +2,11 @@
   padding: 40px;
   min-height: 75vh;
   margin-top: 20px;
-  background-image: linear-gradient(to bottom, rgb(255, 255, 255) 45%, #fcb69f 100%);
+  background-image: linear-gradient(
+    to bottom,
+    rgb(255, 255, 255) 45%,
+    #fcb69f 100%
+  );
 }
 
 .post_btn {
@@ -86,7 +90,7 @@
   border-radius: 5px;
   cursor: pointer;
   margin-bottom: 20px;
-  margin-right:20px;
+  margin-right: 20px;
   font-size: 1rem;
   transition: background-color 0.3s ease;
 }
@@ -125,13 +129,11 @@
 
   .poster {
     width: 100%;
-    height:60%;
+    height: 60%;
   }
 
   .drive_post_cont {
     width: 95%;
     margin: 10px auto;
   }
-
-  
 }

@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import styles from "./PostDrive.module.css";
 import { useNavigate } from "react-router-dom";
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // Vite environment variable
+import { toast } from "react-toastify";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const PostDrive = () => {
   const navigate = useNavigate();
@@ -40,16 +40,24 @@ const PostDrive = () => {
         }
       );
 
-      if (response.status >= 200 && response.status < 300) {
-        alert("Blood Drive Posted Successfully");
+      if (response.status === 200) {
+        toast.success("Blood Drive Posted Successfully");
         navigate("/blood-drives");
       }
     } catch (error) {
-      console.error("Error posting blood drive:", error);
-      alert("Failed to post blood drive. Please try again.");
+      let errorMessage = "Error posting blood drive";
+      if (error.response) {
+        if (error.response.data && error.response.data.message) {
+          errorMessage = error.response.data.message;
+        }
+      } else if (error.request) {
+        errorMessage = "Network Error: Could not connect to the server.";
+      } else {
+        errorMessage += ": " + error.message;
+      }
+      toast.error(errorMessage);
     }
   };
-
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -96,8 +104,7 @@ const PostDrive = () => {
         );
         setSuggestions(response.data || []);
       } catch (error) {
-        console.error("Error fetching autocomplete suggestions:", error);
-        setSuggestions([]); // Clear suggestions if API fails
+        setSuggestions([]); 
       }
     } else {
       setSuggestions([]);
