@@ -30,7 +30,7 @@ const PostDrive = () => {
   const submitDrive = async (formData) => {
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/api/post-drive`,
+        `${API_BASE_URL}/post-drive`,
         formData,
         {
           headers: {
