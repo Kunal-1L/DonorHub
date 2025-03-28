@@ -146,7 +146,7 @@ app.post("/signup", async (req, res) => {
     const hash_pwd = await bcrypt.hash(password, 10);
     const user = new Users({ user_id, password: hash_pwd, role });
     await user.save();
-    res.status(201).json({ message: `${role} registered successfully` });
+    res.status(200).json({ message: `${role} registered successfully` });
   } catch (error) {
     console.error("Signup Error:", error);
     res.status(500).json({ message: "Server error", error: error.message });
@@ -214,7 +214,7 @@ app.post("/profile", verifyToken, async (req, res) => {
         { $set: { profile_completed: true } }
       );
       await profile.save();
-      res.status(201).json({ message: "User Profile Created", profile });
+      res.status(200).json({ message: "User Profile Created", profile });
     } else {
       const profile = new HospitalProfile({
         user_id: req.user_id,
@@ -229,7 +229,7 @@ app.post("/profile", verifyToken, async (req, res) => {
         { user_id: req.user_id },
         { $set: { profile_completed: true } }
       );
-      res.status(201).json({ message: "Hospital Profile Created", profile });
+      res.status(200).json({ message: "Hospital Profile Created", profile });
     }
   } catch (error) {
     console.error("Profile Creation Error:", error);
@@ -245,7 +245,7 @@ app.get("/get-profile", verifyToken, async (req, res) => {
       pro = await HospitalProfile.findOne({ user_id });
     }
     res
-      .status(201)
+      .status(200)
       .json({ message: "Profile Fetched Successfully", profile: pro });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
@@ -309,7 +309,6 @@ app.post("/post-drive", verifyToken, async (req, res) => {
   try {
     const user_id = req.user_id;
     const { location } = req.body;
-
     const response = await axios.get(
       "https://us1.locationiq.com/v1/search.php",
       {
@@ -329,7 +328,7 @@ app.post("/post-drive", verifyToken, async (req, res) => {
       longitude: lon,
     });
     await user.save();
-    res.status(201).json({ message: "Blood Drive posted successfully" });
+    res.status(200).json({ message: "Blood Drive posted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Failed to Post", error: error.message });
   }
@@ -373,7 +372,7 @@ app.post("/save-token", verifyToken, async (req, res) => {
       { $set: { token: token } },
       { new: true, upsert: true }
     );
-    res.status(201).json({ message: "Successfully done" });
+    res.status(200).json({ message: "Successfully done" });
   } catch (error) {
     console.error("Error saving token:", error);
     res.status(500).json({ message: "Failed to save", error: error.message });
@@ -499,7 +498,7 @@ app.post(
         });
 
         await Promise.all(notificationPromises);
-        res.status(201).json({ message: "Uploaded Successfully...." });
+        res.status(200).json({ message: "Uploaded Successfully...." });
       } catch (locationError) {
         console.error(
           "Error fetching coordinates from LocationIQ:",
