@@ -1,5 +1,5 @@
 .drive_post_cont {
-  width: 80%;
+  width: 90%;
   max-width: 600px;
   margin: 20px auto;
   display: flex;
@@ -110,5 +110,8 @@ form textarea:focus {
   form input,
   form textarea {
     width: calc(100% - 12px);
+  }
+  .drive_post_cont{
+    width:100%;
   }
 }
