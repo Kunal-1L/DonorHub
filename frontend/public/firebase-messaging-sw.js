@@ -2,7 +2,7 @@ importScripts("https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"
 importScripts("https://www.gstatic.com/firebasejs/9.15.0/firebase-messaging-compat.js");
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCN04bYLD64QELGJVERFC6Boee-IfPztlw", 
+  apiKey: "AIzaSyCN04bYLD64QELGJVERFC6Boee-IfPztlw",
   authDomain: "donorhub-87520.firebaseapp.com",
   projectId: "donorhub-87520",
   storageBucket: "donorhub-87520.firebasestorage.app",
@@ -16,12 +16,13 @@ const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(function (payload) {
   console.log("[firebase-messaging-sw.js] Received background message ", payload);
-  console.log("Payload Data:", payload.data); 
+  console.log("Payload Data:", payload.data);
 
-  const notificationTitle = "New Emergency Blood Request!";
+  const notificationTitle = payload.notification?.title || "New Emergency Blood Request!";
+  const notificationBody = payload.notification?.body || `Location: ${payload.data.location}, Blood Type: ${payload.data.bloodGroup}`;
   const notificationOptions = {
-    body: `Location: ${payload.data.location}, Blood Type: ${payload.data.bloodType}`,
-    icon: '/firebase-logo.png',
+    body: notificationBody,
+    icon: '/Main.jpeg',
   };
 
   return self.registration.showNotification(notificationTitle, notificationOptions);

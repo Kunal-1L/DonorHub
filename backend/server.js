@@ -5,9 +5,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const axios = require("axios");
-const path = require("path");
-const multer = require("multer");
 const admin = require("firebase-admin");
+
 
 const serviceAccount = {
   type: process.env.FIREBASE_TYPE,
@@ -52,6 +51,7 @@ mongoose
     process.exit(1); // Exit if MongoDB connection fails
   });
 
+
 const app = express();
 
 const corsOptions = {
@@ -71,7 +71,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
 app.use(express.json());
 
 // JWT Middleware
@@ -94,25 +93,7 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./uploads");
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(
-      null,
-      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
-    );
-  },
-});
 
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 1024 * 1024 * 5,
-  },
-});
 
 app.get("/location-suggestions", async (req, res) => {
   const { q } = req.query;
@@ -404,7 +385,7 @@ sendNotification = async (deviceToken, title, body, data) => {
   const message = {
     notification: {
       title: title,
-      body: body,
+      body: body, 
     },
     data: data,
     token: deviceToken,
@@ -425,8 +406,9 @@ sendNotification = async (deviceToken, title, body, data) => {
 app.post(
   "/emergency-push",
   verifyToken,
-  upload.single("medicalDoc"),
   async (req, res) => {
+    console.log(req.body);
+
     try {
       const info = {
         user_id: req.user_id,
@@ -437,7 +419,7 @@ app.post(
           contactName: req.body.contactName,
           contactPhone: req.body.contactPhone,
         },
-        medicalDoc: req.file.path,
+        medicalDoc: req.body.medicalDoc,
       };
 
       console.log("Emergency Request Info:", info);
@@ -490,11 +472,8 @@ app.post(
         });
 
         const notificationTitle = "Emergency Blood Request!";
-        const notificationBody = `A blood request has been made near you.`;
-        const notificationData = {
-          location: req.body.location,
-          bloodGroup: req.body.bloodGroup,
-        };
+        const notificationBody = `A blood request has been made near you. Location: ${info.location}, Blood Type: ${info.bloodGroup}`; 
+
         console.log("Tokens: ", tokens);
         const notificationPromises = tokens.map(async (token) => {
           try {
@@ -502,7 +481,7 @@ app.post(
               token.token,
               notificationTitle,
               notificationBody,
-              notificationData
+              { location: info.location, bloodGroup: info.bloodGroup }
             );
             console.log(
               `Notification sent to ${token.user_id} (${

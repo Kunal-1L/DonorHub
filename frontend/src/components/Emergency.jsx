@@ -28,8 +28,8 @@ const Emergency = () => {
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${userData.token}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData?.token}`,
           },
         }
       );
@@ -53,7 +53,7 @@ const Emergency = () => {
     formData.append("contactName", contactNameRef.current.value);
     formData.append("contactPhone", contactPhoneRef.current.value);
     formData.append("contactEmail", contactEmailRef.current.value);
-    formData.append("medicalDoc", medicalDocRef.current.files[0]);
+    formData.append("medicalDoc", medicalDocRef.current.value);
     requestBlood(formData);
   };
 
@@ -129,9 +129,8 @@ const Emergency = () => {
         <br />
         <label className={styles.label}>Medical Document:</label>
         <input
-          type="file"
+          type="url"
           ref={medicalDocRef}
-          accept=".pdf,.jpg,.jpeg,.png"
           required
           className={styles.input}
         />
