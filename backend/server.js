@@ -7,7 +7,6 @@ const cors = require("cors");
 const axios = require("axios");
 const admin = require("firebase-admin");
 
-
 const serviceAccount = {
   type: process.env.FIREBASE_TYPE,
   project_id: process.env.FIREBASE_PROJECT_ID,
@@ -35,6 +34,7 @@ const {
   DonorRegistration,
   NotificationTokens,
   EmergencyBloodRequest,
+  DonorRequest,
 } = require("./model.js");
 
 // Load environment variables
@@ -50,7 +50,6 @@ mongoose
     console.error("❌ MongoDB Connection Error:", err);
     process.exit(1); // Exit if MongoDB connection fails
   });
-
 
 const app = express();
 
@@ -93,11 +92,8 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-
-
 app.get("/location-suggestions", async (req, res) => {
   const { q } = req.query;
-  console.log(q);
   if (!LOCATIONIQ_API_KEY) {
     return res.status(500).json({ error: "LocationIQ API key not configured" });
   }
@@ -336,7 +332,6 @@ app.post("/post-drive", verifyToken, async (req, res) => {
 
 app.post("/donor-registration", verifyToken, async (req, res) => {
   const { driveId, donorId } = req.body;
-  console.log(req.body);
   try {
     let camp = await DonorRegistration.findOne({ driveId });
 
@@ -380,21 +375,18 @@ app.post("/save-token", verifyToken, async (req, res) => {
 });
 
 sendNotification = async (deviceToken, title, body, data) => {
-  console.log(deviceToken, title, body, data);
   const message = {
     notification: {
       title: title,
-      body: body, 
+      body: body,
     },
     data: data,
     token: deviceToken,
   };
 
-  console.log(message);
 
   try {
     const response = await admin.messaging().send(message);
-    console.log("Successfully sent message:", response);
     return response;
   } catch (error) {
     console.error("Error sending message:", error);
@@ -402,119 +394,174 @@ sendNotification = async (deviceToken, title, body, data) => {
   }
 };
 
-app.post(
-  "/emergency-push",
-  verifyToken,
-  async (req, res) => {
-    console.log(req.body);
+app.post("/emergency-push", verifyToken, async (req, res) => {
 
+  try {
+    const info = {
+      user_id: req.user_id,
+      bloodGroup: req.body.bloodGroup,
+      location: req.body.location,
+      contact: {
+        contactEmail: req.body.contactEmail,
+        contactName: req.body.contactName,
+        contactPhone: req.body.contactPhone,
+      },
+      medicalDoc: req.body.medicalDoc,
+    };
+
+
+    const emergencyRequest = new EmergencyBloodRequest(info);
+    const savedEmergencyRequest = await emergencyRequest.save();
+    const emergencyRequestId = savedEmergencyRequest._id;
+
+    var userProfile = await UserProfile.findOne({ user_id: req.user_id });
+    if (!userProfile) {
+      userProfile = await HospitalProfile.findOne({ user_id: req.user_id });
+      if (!userProfile)
+        return res.status(404).json({ message: "User profile not found." });
+    }
+
+    const { location } = req.body;
     try {
-      const info = {
-        user_id: req.user_id,
-        bloodGroup: req.body.bloodGroup,
-        location: req.body.location,
-        contact: {
-          contactEmail: req.body.contactEmail,
-          contactName: req.body.contactName,
-          contactPhone: req.body.contactPhone,
-        },
-        medicalDoc: req.body.medicalDoc,
-      };
+      const response = await axios.get(
+        `https://us1.locationiq.com/v1/search.php`,
+        {
+          params: { key: LOCATIONIQ_API_KEY, q: location, format: "json" },
+        }
+      );
 
-      console.log("Emergency Request Info:", info);
-
-      const emergencyRequest = new EmergencyBloodRequest(info);
-      await emergencyRequest.save();
-
-      var userProfile = await UserProfile.findOne({ user_id: req.user_id });
-      if (!userProfile) {
-        userProfile = await HospitalProfile.findOne({ user_id: req.user_id });
-        if (!userProfile)
-          return res.status(404).json({ message: "User profile not found." });
+      if (response.data.length === 0) {
+        return res.status(404).json({ message: "Location not found." });
       }
 
-      const { location } = req.body;
-      try {
-        const response = await axios.get(
-          `https://us1.locationiq.com/v1/search.php`,
-          {
-            params: { key: LOCATIONIQ_API_KEY, q: location, format: "json" },
-          }
+      const { lat: userLat, lon: userLon } = response.data[0];
+
+      const availableUsers = await UserProfile.find({
+        user_id: { $ne: req.user_id },
+      });
+      const nearbyUsers = availableUsers.filter((user) => {
+        const distance = getDistanceFromLatLon(
+          userLat,
+          userLon,
+          user.latitude,
+          user.longitude
         );
+        return distance <= 10 && user.bloodGroup == info.bloodGroup;
+      });
 
-        if (response.data.length === 0) {
-          return res.status(404).json({ message: "Location not found." });
-        }
+      const nearbyUserIds = nearbyUsers.map((user) => user.user_id);
 
-        const { lat: userLat, lon: userLon } = response.data[0];
-        console.log("Fetched Coordinates (Requester):", { userLat, userLon });
-
-        const availableUsers = await UserProfile.find({
-          user_id: { $ne: req.user_id },
-        });
-
-        const nearbyUsers = availableUsers.filter((user) => {
-          const distance = getDistanceFromLatLon(
-            userLat,
-            userLon,
-            user.latitude,
-            user.longitude
-          );
-          return distance <= 10 && user.bloodGroup == info.bloodGroup;
-        });
-
-        console.log("Nearby Users:", nearbyUsers);
-
-        const nearbyUserIds = nearbyUsers.map((user) => user.user_id);
-        const tokens = await NotificationTokens.find({
-          user_id: { $in: nearbyUserIds },
-        });
-
-        const notificationTitle = "Emergency Blood Request!";
-        const notificationBody = `A blood request has been made near you. Location: ${info.location}, Blood Type: ${info.bloodGroup}`; // Construct the body here
-
-        console.log("Tokens: ", tokens);
-        const notificationPromises = tokens.map(async (token) => {
+      // Save userId and emergencyRequestId in DonorRequest
+      await Promise.all(
+        nearbyUserIds.map(async (nearbyUserId) => {
           try {
-            const response = await sendNotification(
-              token.token,
-              notificationTitle,
-              notificationBody, // Use the constructed body
-              { location: info.location, bloodGroup: info.bloodGroup }
-            );
-            console.log(
-              `Notification sent to ${token.user_id} (${
-                token.token
-              }): ${JSON.stringify(response)}`
-            );
-            return response;
+            let donorRequest = await DonorRequest.findOne({
+              user_id: nearbyUserId,
+            });
+
+            if (donorRequest) {
+              if (!donorRequest.request.includes(emergencyRequestId)) {
+                donorRequest.request.push(emergencyRequestId);
+                await donorRequest.save();
+              }
+            } else {
+              const newDonorRequest = new DonorRequest({
+                user_id: nearbyUserId,
+                request: [emergencyRequestId],
+              });
+              await newDonorRequest.save();
+            }
           } catch (error) {
             console.error(
-              `Error sending notification to ${token.user_id} (${token.token}):`,
+              `Error updating/creating DonorRequest for user ${nearbyUserId}:`,
               error
             );
-            return null;
           }
-        });
+        })
+      );
 
-        await Promise.all(notificationPromises);
-        res.status(200).json({ message: "Uploaded Successfully...." });
-      } catch (locationError) {
-        console.error(
-          "Error fetching coordinates from LocationIQ:",
-          locationError
-        );
-        return res.status(500).json({
-          message: "Error fetching location coordinates",
-          error: locationError.message,
-        });
-      }
-    } catch (error) {
-      console.error("Emergency Push Error:", error);
-      res.status(500).json({ message: "Server Error", error: error.message });
+      const tokens = await NotificationTokens.find({
+        user_id: { $in: nearbyUserIds },
+      });
+
+      const notificationTitle = "Emergency Blood Request!";
+      const notificationBody = `A blood request has been made near you. Location: ${info.location}, Blood Type: ${info.bloodGroup}`;
+
+      const notificationPromises = tokens.map(async (token) => {
+        try {
+          const response = await sendNotification(
+            token.token,
+            notificationTitle,
+            notificationBody,
+            { location: info.location, bloodGroup: info.bloodGroup }
+          );
+          return response;
+        } catch (error) {
+          console.error(
+            `Error sending notification to ${token.user_id} (${token.token}):`,
+            error
+          );
+          return null;
+        }
+      });
+
+      await Promise.all(notificationPromises);
+      res.status(200).json({ message: "Uploaded Successfully...." });
+    } catch (locationError) {
+      console.error(
+        "Error fetching coordinates from LocationIQ:",
+        locationError
+      );
+      return res.status(500).json({
+        message: "Error fetching location coordinates",
+        error: locationError.message,
+      });
     }
+  } catch (error) {
+    console.error("Emergency Push Error:", error);
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
-);
+});
+
+app.get("/donor-calls", verifyToken, async (req, res) => {
+  try {
+    const user_id = req.user_id;
+
+    let donorRequest = await DonorRequest.findOne({
+      user_id: user_id,
+    }).populate("request");
+
+    if (!donorRequest) {
+      return res.status(200).json({ message: "No Requests for you" });
+    }
+
+    const expiredRequestIds = donorRequest.request
+      .filter((req) => {
+        const expirationTime =
+          req.createdAt.getTime() + 7 * 24 * 60 * 60 * 1000;
+        return expirationTime <= Date.now();
+      })
+      .map((req) => req._id);
+
+    if (expiredRequestIds.length > 0) {
+      await DonorRequest.findOneAndUpdate(
+        { user_id: user_id },
+        { $pull: { request: { $in: expiredRequestIds } } },
+        { new: true }
+      );
+      donorRequest = await DonorRequest.findOne({ user_id: user_id }).populate(
+        "request"
+      );
+    }
+
+    return res.status(200).json({
+      ...donorRequest.toObject(),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+});
 
 // Protected Route Example
 app.get("/dashboard", verifyToken, (req, res) => {

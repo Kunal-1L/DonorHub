@@ -109,37 +109,40 @@ const LogIn = () => {
   }, [userData, token]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.signup_container}>
-        <h2>Log In</h2>
-        <form onSubmit={handleSubmit} autoComplete="off">
-          <input
-            type="email"
-            ref={emailRef}
-            name="email"
-            placeholder="Enter your email"
-            required
-          />
-          <input
-            type="password"
-            ref={passwordRef}
-            name="password"
-            placeholder="Enter your password"
-            required
-          />
-          <button type="submit">Log In</button>
-        </form>
-        <div className={styles.shift_container}>
-          Don't have an account?{" "}
-          <a
-            style={{ color: "blue", marginLeft: "2px", cursor: "pointer" }}
-            onClick={handleSignUpClick}
-          >
-            Click Here
-          </a>
+    <>
+      <title>LogIn</title>
+      <div className={styles.container}>
+        <div className={styles.signup_container}>
+          <h2>Log In</h2>
+          <form onSubmit={handleSubmit} autoComplete="off">
+            <input
+              type="email"
+              ref={emailRef}
+              name="email"
+              placeholder="Enter your email"
+              required
+            />
+            <input
+              type="password"
+              ref={passwordRef}
+              name="password"
+              placeholder="Enter your password"
+              required
+            />
+            <button type="submit">Log In</button>
+          </form>
+          <div className={styles.shift_container}>
+            Don't have an account?{" "}
+            <a
+              style={{ color: "blue", marginLeft: "2px", cursor: "pointer" }}
+              onClick={handleSignUpClick}
+            >
+              Click Here
+            </a>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -85,7 +85,6 @@ const BloodDrives = () => {
     const clickY = event.clientY;
 
     if (detailsContainer) {
-      console.log(drive);
       detailsContainer.innerHTML = `
         <h2>${drive.title}
        <span id="close_button">\u00D7</span>
@@ -170,59 +169,63 @@ const BloodDrives = () => {
     navigate("/emergency-call");
   };
   return (
-    <div
-      className={styles.drive_container}
-      style={{
-        backgroundImage:
-          "linear-gradient(to bottom,rgb(255, 255, 255) 25%,to #fcb69f 100%)",
-      }}
-    >
-      <button className={styles.post_btn} onClick={handlePostClick}>
-        Post Blood Drive
-      </button>
-      <button className={styles.post_btn} onClick={handleEmergencyClick}>
-        Emergency Blood
-      </button>
-      {drives.length > 0 ? (
-        drives.map((drive, index) => (
-          <div
-            key={index}
-            className={styles.drive}
-            onClick={() => handleDriveClick(index, event)}
-          >
-            <div className={styles.poster}>
-              <img src={drive.poster} alt="Drive Poster" />
-            </div>
-            <div className={styles.drive_info}>
-              <div>
-                <strong>Location:</strong> {drive.location}
+    <>
+      <title>Blood Drives</title>
+      <div
+        className={styles.drive_container}
+        style={{
+          backgroundImage:
+            "linear-gradient(to bottom,rgb(255, 255, 255) 25%,to #fcb69f 100%)",
+        }}
+      >
+        <button className={styles.post_btn} onClick={handlePostClick}>
+          Post Blood Drive
+        </button>
+        <button className={styles.post_btn} onClick={handleEmergencyClick}>
+          Emergency Blood
+        </button>
+        {drives.length > 0 ? (
+          drives.map((drive, index) => (
+            <div
+              key={index}
+              className={styles.drive}
+              onClick={() => handleDriveClick(index, event)}
+            >
+              <div className={styles.poster}>
+                <img src={drive.poster} alt="Drive Poster" />
               </div>
-              <div>
-                <strong>Date:</strong>{" "}
-                {new Date(drive.date).toLocaleDateString()} |{" "}
-                <strong>Time:</strong> {drive.time.startTime} -{" "}
-                {drive.time.endTime}
+              <div className={styles.drive_info}>
+                <div>
+                  <strong>Location:</strong> {drive.location}
+                </div>
+                <div>
+                  <strong>Date:</strong>{" "}
+                  {new Date(drive.date).toLocaleDateString()} |{" "}
+                  <strong>Time:</strong> {drive.time.startTime} -{" "}
+                  {drive.time.endTime}
+                </div>
               </div>
+              {userData?.role === "User" &&
+                drive.user_id != userData.user_id && (
+                  <button
+                    className={styles.reg_btn}
+                    onClick={(event) => handleRegistration(event, index)}
+                  >
+                    Register
+                  </button>
+                )}
             </div>
-            {userData?.role === "User" && drive.user_id != userData.user_id && (
-              <button
-                className={styles.reg_btn}
-                onClick={(event) => handleRegistration(event, index)}
-              >
-                Register
-              </button>
-            )}
+          ))
+        ) : (
+          <div className={styles.not_found}>No blood drives available.</div>
+        )}
+        {
+          <div ref={divRef1} id="drive-details">
+            {/* Content will be populated here by handleDriveClick */}
           </div>
-        ))
-      ) : (
-        <p>No blood drives available.</p>
-      )}
-      {
-        <div ref={divRef1} id="drive-details">
-          {/* Content will be populated here by handleDriveClick */}
-        </div>
-      }
-    </div>
+        }
+      </div>
+    </>
   );
 };
 

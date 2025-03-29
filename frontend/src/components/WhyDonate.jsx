@@ -27,6 +27,7 @@ const WhyDonate = () => {
 
   return (
     <>
+      <title>Why Donate</title>
       <div className={styles.top_section}>
         <div className={styles.top_left}>
           <img src="/BloodDrop.jpeg" alt="Blood Drop" />

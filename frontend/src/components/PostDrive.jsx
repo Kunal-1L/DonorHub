@@ -112,6 +112,8 @@ const PostDrive = () => {
   };
 
   return (
+    <>
+    <title>Post Drive</title>
     <div className={styles.container}>
       <div className={styles.drive_post_cont}>
         <h1 className={styles.heading}>Create Blood Drive</h1>
@@ -177,6 +179,7 @@ const PostDrive = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 

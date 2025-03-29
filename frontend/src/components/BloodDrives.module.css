@@ -10,6 +10,10 @@
   );
 }
 
+.not_found {
+  min-height: 50vh;
+}
+
 .post_btn {
   background-color: #e74c3c;
   margin-right: 20px;

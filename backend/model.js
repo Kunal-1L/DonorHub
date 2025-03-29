@@ -118,6 +118,15 @@ const EmergencyBloodRequestSchema = new mongoose.Schema({
 
 const EmergencyBloodRequest = mongoose.model('EmergencyBloodRequest', EmergencyBloodRequestSchema);
 
+const DonorRequestSchema = new mongoose.Schema({
+  user_id: { type: String, required: true },
+  request: [{
+    type: mongoose.ObjectId,
+    ref: 'EmergencyBloodRequest'
+  }],
+});
+
+const DonorRequest = mongoose.model("DonorRequest", DonorRequestSchema);
 
 module.exports = {
   Users,
@@ -126,5 +135,6 @@ module.exports = {
   BloodDrive,
   DonorRegistration,
   NotificationTokens,
-  EmergencyBloodRequest
+  EmergencyBloodRequest,
+  DonorRequest
 };

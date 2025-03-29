@@ -93,95 +93,98 @@ const Emergency = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.drive_post_cont}>
-        <h1 className={styles.heading}>Emergency Blood Request</h1>
-        <form onSubmit={handleSubmit} className={styles.formContainer}>
-          <label className={styles.label}>Blood Type:</label>
-          <select ref={bloodGroupRef} required className={styles.input}>
-            <option value="">Select Blood Type</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-          </select>
-          <br />
-          <br />
-          <div className={styles.autocomplete}>
-            <label className={styles.label}>Location:</label>
+    <>
+      <title>Emergency Blood</title>
+      <div className={styles.container}>
+        <div className={styles.drive_post_cont}>
+          <h1 className={styles.heading}>Emergency Blood Request</h1>
+          <form onSubmit={handleSubmit} className={styles.formContainer}>
+            <label className={styles.label}>Blood Type:</label>
+            <select ref={bloodGroupRef} required className={styles.input}>
+              <option value="">Select Blood Type</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+            <br />
+            <br />
+            <div className={styles.autocomplete}>
+              <label className={styles.label}>Location:</label>
+              <input
+                type="text"
+                ref={locationRef}
+                onChange={handleLocationChange}
+                required
+                className={styles.input}
+              />
+              {suggestions.length > 0 && (
+                <ul className={styles.suggestionsList}>
+                  {suggestions.map((suggestion) => (
+                    <li
+                      key={suggestion.place_id}
+                      className={styles.suggestionItem}
+                      onClick={() => handleSuggestionClick(suggestion)}
+                    >
+                      {suggestion.display_name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <br />
+            <br />
+            <label className={styles.label}>Medical Document:</label>
             <input
-              type="text"
-              ref={locationRef}
-              onChange={handleLocationChange}
+              type="url"
+              ref={medicalDocRef}
               required
               className={styles.input}
             />
-            {suggestions.length > 0 && (
-              <ul className={styles.suggestionsList}>
-                {suggestions.map((suggestion) => (
-                  <li
-                    key={suggestion.place_id}
-                    className={styles.suggestionItem}
-                    onClick={() => handleSuggestionClick(suggestion)}
-                  >
-                    {suggestion.display_name}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+            <br />
+            <br />
 
-          <br />
-          <br />
-          <label className={styles.label}>Medical Document:</label>
-          <input
-            type="url"
-            ref={medicalDocRef}
-            required
-            className={styles.input}
-          />
-          <br />
-          <br />
+            <h3 className={styles.contactHeading}>Contact Information</h3>
+            <label className={styles.label}>Name:</label>
+            <input
+              type="text"
+              ref={contactNameRef}
+              required
+              className={styles.input}
+            />
+            <br />
+            <br />
 
-          <h3 className={styles.contactHeading}>Contact Information</h3>
-          <label className={styles.label}>Name:</label>
-          <input
-            type="text"
-            ref={contactNameRef}
-            required
-            className={styles.input}
-          />
-          <br />
-          <br />
+            <label className={styles.label}>Phone:</label>
+            <input
+              type="text"
+              ref={contactPhoneRef}
+              required
+              className={styles.input}
+            />
 
-          <label className={styles.label}>Phone:</label>
-          <input
-            type="text"
-            ref={contactPhoneRef}
-            required
-            className={styles.input}
-          />
+            <label className={styles.label}>Email:</label>
+            <input
+              type="email"
+              ref={contactEmailRef}
+              required
+              className={styles.input}
+            />
+            <br />
+            <br />
 
-          <label className={styles.label}>Email:</label>
-          <input
-            type="email"
-            ref={contactEmailRef}
-            required
-            className={styles.input}
-          />
-          <br />
-          <br />
-
-          <button type="submit" className={styles.submitButton}>
-            Submit Request
-          </button>
-        </form>
+            <button type="submit" className={styles.submitButton}>
+              Submit Request
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

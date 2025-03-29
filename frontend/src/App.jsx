@@ -9,6 +9,7 @@ import BloodDrives from "./components/BloodDrives";
 import PostDrive from "./components/PostDrive";
 import Emergency from "./components/Emergency";
 import Footer from "./components/Footer";
+import DonorCalls from "./components/DonorCalls";
 function App() {
   
   
@@ -24,6 +25,7 @@ function App() {
         <Route path="/blood-drives" element={<BloodDrives />} />
         <Route path="/post-drive" element={<PostDrive />} />
         <Route path="/emergency-call" element={<Emergency />} />
+        <Route path="/donor-calls" element={<DonorCalls/>} />
         <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
       <Footer />

@@ -61,44 +61,47 @@ const SignUp = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.signup_container}>
-        <h2>Sign Up</h2>
-        <form onSubmit={handleSubmit} autoComplete="off">
-          <input
-            type="email"
-            ref={emailRef}
-            name="email"
-            placeholder="Enter your email"
-            required
-          />
-          <input
-            type="password"
-            ref={passwordRef}
-            name="password"
-            placeholder="Enter your password"
-            required
-          />
-          <div>
-            <select ref={roleRef} name="role">
-              <option value="User">User</option>
-              <option value="Hospital">Hospital</option>
-              <option value="Admin">Admin</option>
-            </select>
+    <>
+      <title>SignUp</title>
+      <div className={styles.container}>
+        <div className={styles.signup_container}>
+          <h2>Sign Up</h2>
+          <form onSubmit={handleSubmit} autoComplete="off">
+            <input
+              type="email"
+              ref={emailRef}
+              name="email"
+              placeholder="Enter your email"
+              required
+            />
+            <input
+              type="password"
+              ref={passwordRef}
+              name="password"
+              placeholder="Enter your password"
+              required
+            />
+            <div>
+              <select ref={roleRef} name="role">
+                <option value="User">User</option>
+                <option value="Hospital">Hospital</option>
+                <option value="Admin">Admin</option>
+              </select>
+            </div>
+            <button type="submit">Sign Up</button>
+          </form>
+          <div className={styles.shift_container}>
+            Already have an account?{" "}
+            <span
+              style={{ color: "blue", marginLeft: "2px", cursor: "pointer" }}
+              onClick={handleLoginClick}
+            >
+              Click Here
+            </span>
           </div>
-          <button type="submit">Sign Up</button>
-        </form>
-        <div className={styles.shift_container}>
-          Already have an account?{" "}
-          <span
-            style={{ color: "blue", marginLeft: "2px", cursor: "pointer" }}
-            onClick={handleLoginClick}
-          >
-            Click Here
-          </span>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

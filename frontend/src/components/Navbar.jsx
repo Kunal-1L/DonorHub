@@ -46,7 +46,7 @@ const Navbar = () => {
           {profileOpen && (
             <div className={styles.profileDropdown}>
               <div onClick={() => navigate("/profile")}>My Profile</div>
-              <div>Donor Calls</div>
+              <div onClick={() => navigate("/donor-calls")}>Donor Calls</div>
               <div onClick={handleLogOut}>Log Out</div>
             </div>
           )}

@@ -100,15 +100,10 @@ const Profile = () => {
     }
   };
 
-  if (!userData) {
-    return (
-      <div className={styles.profileContainer}>
-        Please log in to view your profile.
-      </div>
-    );
-  }
+  
 
   return !userData.profile_completed ? (
+    <>      <title>Profile Form</title>
     <div className={styles.profileContainer}>
       <h2 className={styles.userTitle}>
         <FontAwesomeIcon icon={faUser} className={styles.icon} />{" "}
@@ -195,8 +190,10 @@ const Profile = () => {
       <button className={styles.saveButton} onClick={handleSave}>
         <FontAwesomeIcon icon={faSave} /> Save Changes
       </button>
-    </div>
+    </div></>
   ) : profile ? (
+    <>
+    <title>Profile</title>
     <div className={styles.childProfile}>
       <div className={styles.profileContainer}>
         <h2 className={styles.heading}>User Profile</h2>
@@ -213,8 +210,9 @@ const Profile = () => {
           <strong>Location:</strong> {profile.location}
         </p>
       </div>
-    </div>
+    </div> </>
   ) : (
+
     <div>
       <Loading />
     </div>
