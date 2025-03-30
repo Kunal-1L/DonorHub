@@ -75,7 +75,7 @@ const Home = () => {
 
     const interval = setInterval(() => {
       setSloganIndices((prevIndices) => getRandomIndices(prevIndices));
-    }, 3000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, []);
