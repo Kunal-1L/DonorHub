@@ -24,8 +24,11 @@ const Profile = () => {
   const [location, setLocation] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [profile, setProfile] = useState(null);
+  const [loadingProfile, setLoadingProfile] = useState(false);
+
   useEffect(() => {
     const getProfile = async () => {
+      setLoadingProfile(true);
       try {
         const response = await axios.get(`${API_BASE_URL}/get-profile`, {
           headers: {
@@ -35,13 +38,15 @@ const Profile = () => {
         setProfile(response.data.profile);
       } catch (error) {
         toast.error("Error fetching profile");
+      } finally {
+        setLoadingProfile(false);
       }
     };
 
     if (userData?.profile_completed) {
       getProfile();
     }
-  }, []);
+  }, [userData?.profile_completed, userData?.token]);
 
   const handleLocationChange = async (e) => {
     const inputValue = e.target.value;
@@ -100,119 +105,133 @@ const Profile = () => {
     }
   };
 
-  
-
   return !userData.profile_completed ? (
-    <>      <title>Profile Form</title>
-    <div className={styles.profileContainer}>
-      <h2 className={styles.userTitle}>
-        <FontAwesomeIcon icon={faUser} className={styles.icon} />{" "}
-        {userData.role} Profile
-      </h2>
+    <>
+      <title>Profile Form</title>
+      <div className={styles.profileContainer}>
+        <h2 className={styles.userTitle}>
+          <FontAwesomeIcon icon={faUser} className={styles.icon} />{" "}
+          {userData.role} Profile
+        </h2>
 
-      <div className={styles.profileItem}>
-        <span className={styles.label}>
-          <FontAwesomeIcon icon={faUser} className={styles.icon} /> Name:
-        </span>
-        <input
-          type="text"
-          placeholder="Full Name"
-          ref={nameRef}
-          className={styles.inputField}
-          required
-        />
-      </div>
-
-      <div className={styles.profileItem}>
-        <span className={styles.label}>
-          <FontAwesomeIcon icon={faPhone} className={styles.icon} /> Phone:
-        </span>
-        <input
-          type="text"
-          placeholder="Enter your phone number"
-          ref={phoneRef}
-          className={styles.inputField}
-          required
-        />
-      </div>
-
-      {userData.role === "User" && (
         <div className={styles.profileItem}>
           <span className={styles.label}>
-            <FontAwesomeIcon icon={faTint} className={styles.icon} /> Blood
-            Group:
+            <FontAwesomeIcon icon={faUser} className={styles.icon} /> Name:
           </span>
-          <select ref={bloodGroupRef} className={styles.selectField} required>
-            <option value="">Select Blood Group</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-          </select>
-        </div>
-      )}
-
-      <div className={styles.profileItem}>
-        <span className={styles.label}>
-          <FontAwesomeIcon icon={faMapMarkerAlt} className={styles.icon} />{" "}
-          Location:
-        </span>
-        <div className={styles.autocompleteContainer}>
           <input
             type="text"
-            placeholder="Enter your location"
+            placeholder="Full Name"
+            ref={nameRef}
             className={styles.inputField}
-            value={location}
-            ref={locationRef}
-            onChange={handleLocationChange}
             required
           />
-          {suggestions.length > 0 && (
-            <ul className={styles.suggestionsList}>
-              {suggestions.map((suggestion) => (
-                <li
-                  key={suggestion.place_id}
-                  className={styles.suggestionItem}
-                  onClick={() => handleSuggestionClick(suggestion)}
-                >
-                  {suggestion.display_name}
-                </li>
-              ))}
-            </ul>
-          )}
         </div>
-      </div>
 
-      <button className={styles.saveButton} onClick={handleSave}>
-        <FontAwesomeIcon icon={faSave} /> Save Changes
-      </button>
-    </div></>
+        <div className={styles.profileItem}>
+          <span className={styles.label}>
+            <FontAwesomeIcon icon={faPhone} className={styles.icon} /> Phone:
+          </span>
+          <input
+            type="text"
+            placeholder="Enter your phone number"
+            ref={phoneRef}
+            className={styles.inputField}
+            required
+          />
+        </div>
+
+        {userData.role === "User" && (
+          <div className={styles.profileItem}>
+            <span className={styles.label}>
+              <FontAwesomeIcon icon={faTint} className={styles.icon} /> Blood
+              Group:
+            </span>
+            <select ref={bloodGroupRef} className={styles.selectField} required>
+              <option value="">Select Blood Group</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+          </div>
+        )}
+
+        <div className={styles.profileItem}>
+          <span className={styles.label}>
+            <FontAwesomeIcon icon={faMapMarkerAlt} className={styles.icon} />{" "}
+            Location:
+          </span>
+          <div className={styles.autocompleteContainer}>
+            <input
+              type="text"
+              placeholder="Enter your location"
+              className={styles.inputField}
+              value={location}
+              ref={locationRef}
+              onChange={handleLocationChange}
+              required
+            />
+            {suggestions.length > 0 && (
+              <ul className={styles.suggestionsList}>
+                {suggestions.map((suggestion) => (
+                  <li
+                    key={suggestion.place_id}
+                    className={styles.suggestionItem}
+                    onClick={() => handleSuggestionClick(suggestion)}
+                  >
+                    {suggestion.display_name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+
+        <button className={styles.saveButton} onClick={handleSave}>
+          <FontAwesomeIcon icon={faSave} /> Save Changes
+        </button>
+      </div>
+    </>
+  ) : loadingProfile ? (
+    <div>
+      <Loading />
+    </div>
   ) : profile ? (
     <>
-    <title>Profile</title>
-    <div className={styles.childProfile}>
+      <title>Profile</title>
       <div className={styles.profileContainer}>
         <h2 className={styles.heading}>User Profile</h2>
-        <p>
-          <strong>Name:</strong> {profile.name}
-        </p>
-        <p>
-          <strong>Email:</strong> {profile.user_id}
-        </p>
-        <p>
-          <strong>Phone:</strong> {profile.phone}
-        </p>
-        <p>
-          <strong>Location:</strong> {profile.location}
-        </p>
+        <div className={styles.profileDetails}>
+          <div className={styles.profileImg}>
+            <img src="people.png" alt="Profile" />
+          </div>
+          <div className={styles.details}>
+            <p>
+              <strong>Name:</strong> {profile.name}
+            </p>
+            <p>
+              <strong>Email:</strong> {profile.user_id}
+            </p>
+            <p>
+              <strong>Phone:</strong> {profile.phone}
+            </p>
+            <p>
+              <strong>Location:</strong> {profile.location}
+            </p>
+            {profile.bloodGroup && (
+              <p>
+                <strong>Blood Group:</strong> {profile.bloodGroup}
+              </p>
+            )}
+          </div>
+        </div>
       </div>
-    </div> </>
+    </>
   ) : (
-
     <div>
       <Loading />
     </div>

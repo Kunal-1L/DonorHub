@@ -26,11 +26,18 @@
   cursor: pointer;
   font-family: "Roboto";
   padding: 15px;
+  width: 250px;
+  text-align: center;
+  padding: 15px 15px;
+  background-color: #fcb69f;
+  border-radius: .5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 1rem 2rem;
 }
 
 .app_info div:hover {
   text-decoration: underline;
-  color: #701212;
+  color: #a81c1c;
   transition-duration: 250ms;
   transition-property: all;
   transition-timing-function: ease-in-out;
@@ -145,6 +152,7 @@
   }
   .app_info {
     flex-wrap: wrap;
+    font-size: 1.1rem;
   }
   .app_info div {
     margin-bottom: 20px;
