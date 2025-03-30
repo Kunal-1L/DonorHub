@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Home.module.css";
-
+import { useNavigate } from "react-router-dom";
 const images = ["/transition1.jpeg", "/transition2.jpeg", "/transition3.jpeg"];
 
 const Home = () => {
   const [showImages, setShowImages] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
+  const [sloganIndices, setSloganIndices] = useState([]);
+  const [userData, setUserData] = useState();
+  const navigate = useNavigate();
+  useEffect(()=>{
+    const u = JSON.parse(sessionStorage.getItem('userData'));
+    setUserData(u);
+  }, []);
 
   useEffect(() => {
     const sloganTimeout = setTimeout(() => {
@@ -24,6 +31,21 @@ const Home = () => {
       return () => clearInterval(interval);
     }
   }, [showImages]);
+
+  useEffect(() => {
+    // Generate three unique random indices for slogans
+    const indices = [];
+    while (indices.length < 3) {
+      const randomIndex = Math.floor(
+        Math.random() * bloodDonationSlogans.length
+      );
+      if (!indices.includes(randomIndex)) {
+        indices.push(randomIndex);
+      }
+    }
+    setSloganIndices(indices);
+  }, []);
+
   const bloodDonationSlogans = [
     "Your single blood donation can save up to three lives in need.",
     "The gift of life is within you, share it through blood donation.",
@@ -47,17 +69,31 @@ const Home = () => {
     "In the face of adversity, your blood donation can be a miracle.",
   ];
 
-  function getRandomNumber() {
-    return Math.floor(Math.random() * 20);
-  }
+  const handleEmergency = () => {
+    if (!userData) {
+      navigate("/login");
+    } else {
+      navigate("/emergency-call");
+    }
+  };
 
+  const handleHostDrives = () => {
+    if (!userData) {
+      navigate("/login");
+    } else {
+      navigate("/post-drive");
+    }
+  };
+
+  const handleExploreDrives = () => {
+    if (!userData) {
+      navigate("/login");
+    } else {
+      navigate("/blood-drives");
+    }
+  };
   return (
-    <div
-      style={{
-        backgroundImage:
-          "linear-gradient(to bottom,rgb(255, 255, 255) 45%, #fcb69f 100%)",
-      }}
-    >
+    <div className={styles.home_container}>
       {showImages && (
         <div className={styles.imageContainer}>
           <img
@@ -72,9 +108,14 @@ const Home = () => {
         <h1 className={styles.i2}>Make a Difference</h1>
       </div>
       <div className={styles.slogans}>
-        <div>{bloodDonationSlogans[getRandomNumber()]}</div>
-        <div>{bloodDonationSlogans[getRandomNumber()]}</div>
-        <div>{bloodDonationSlogans[getRandomNumber()]}</div>
+        {sloganIndices.map((index) => (
+          <div key={index}>{bloodDonationSlogans[index]}</div>
+        ))}
+      </div>
+      <div className={styles.app_info}>
+        <div onClick={() => handleEmergency()}>Emergency Blood Request</div>
+        <div onClick={() => handleHostDrives()}>Host Blood Drives</div>
+        <div onClick={() => handleExploreDrives()}>Explore Drives</div>
       </div>
     </div>
   );

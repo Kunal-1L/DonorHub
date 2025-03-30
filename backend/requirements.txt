@@ -6,6 +6,6 @@
 6: Also implement functionality of registration to blood camp : Done
 7. Certification: Drives registered here provide certification to n people and if user account exist online certification can provide. 
 8. From this certificate implement badges system and also make sure to store this certification date because there is fixed amount of gap b/w 2 blood donation activity and show Upcoming drives to user who are eligible rest of them show that you can't donate today but come on <specific Date>
-9. Some people required emergency blood so we can't wait for available donor in proximity to get login and see the donor requests so we should use web push notificatioin to eligible donor. Partially Done
+9. Some people required emergency blood so we can't wait for available donor in proximity to get login and see the donor requests so we should use web push notificatioin to eligible donor.  Done
 10. History of certificate and limited blood donation site
-11. If specific requirement like particular blood type only then no need to send notificatioin to everyone
+11. If specific requirement like particular blood type only then no need to send notificatioin to everyone Done

@@ -4,6 +4,39 @@
   animation: fadeIn 2s forwards;
 }
 
+.home_container {
+  background-image: linear-gradient(
+    to bottom,
+    rgb(255, 255, 255) 45%,
+    #fcb69f 100%
+  );
+}
+
+.app_info {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 10px;
+  font-size: 1.3rem;
+  padding: 50px;
+}
+
+.app_info div {
+  color: #494949;
+  cursor: pointer;
+  font-family: "Roboto";
+  padding: 15px;
+}
+
+.app_info div:hover {
+  text-decoration: underline;
+  color: #701212;
+  transition-duration: 250ms;
+  transition-property: all;
+  transition-timing-function: ease-in-out;
+  transform-style: preserve-3d;
+  transform: scale(1.05);
+}
 .i1,
 .i2 {
   font-size: 2.5rem;
@@ -109,5 +142,11 @@
 
   .slogans > div {
     width: 60%;
+  }
+  .app_info {
+    flex-wrap: wrap;
+  }
+  .app_info div {
+    margin-bottom: 20px;
   }
 }
