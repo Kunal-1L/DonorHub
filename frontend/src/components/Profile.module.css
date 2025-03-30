@@ -7,11 +7,8 @@
     rgb(255, 255, 255) 45%,
     #fcb69f 100%
   );
-  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   font-size: 1.1rem;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .heading {
@@ -162,7 +159,6 @@
   .profileContainer {
     padding: 20px;
     margin-top: 10px;
-    width: 95%; /* Adjust width for smaller screens */
   }
 
   .heading {
