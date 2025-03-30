@@ -103,16 +103,17 @@ const Home = () => {
         <h1 className={styles.i1}>Donate Blood, </h1>
         <h1 className={styles.i2}>Make a Difference</h1>
       </div>
-      <div className={styles.slogans}>
-        {sloganIndices.map((index) => (
-          <div key={index}>{bloodDonationSlogans[index]}</div>
-        ))}
-      </div>
       <div className={styles.app_info}>
         <div onClick={handleEmergency}>Emergency Blood Request</div>
         <div onClick={handleHostDrives}>Host Blood Drives</div>
         <div onClick={handleExploreDrives}>Explore Drives</div>
       </div>
+      <div className={styles.slogans}>
+        {sloganIndices.map((index) => (
+          <div key={index}>{bloodDonationSlogans[index]}</div>
+        ))}
+      </div>
+      
     </div>
   );
 };
