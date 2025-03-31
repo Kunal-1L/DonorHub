@@ -19,11 +19,8 @@
   margin-top: 10px;
   font-size: 1.3rem;
   padding: 80px 50px;
-  background-image: linear-gradient(
-    to bottom,
-    #aaa 45%,
-    #fcb69f 100%
-  );  border-top-left-radius: 20px;
+  background-image: linear-gradient(to bottom, #aaa 45%, #fcb69f 100%);
+  border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
 
@@ -35,7 +32,7 @@
   text-align: center;
   padding: 15px 15px;
   background-color: #fcb69f;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   margin: 1rem 2rem;
 }
@@ -60,11 +57,9 @@
 @keyframes fadeIn {
   0% {
     opacity: 0;
-    transform: translateY(-30px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -141,7 +136,52 @@
     opacity: 1;
   }
 }
+.faqsHeader {
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  gap: 10px; 
+  width: 100%; 
+  margin-bottom: 10px;
+}
 
+.faqsHeader > div:first-child,
+.faqsHeader > div:last-child {
+  flex-grow: 1;
+  height: 1px; 
+  background-color: #fa7575;
+}
+
+.faqsHeader .myDiv {
+  padding: 0 10px; 
+  white-space: nowrap; 
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.faqs {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-evenly;
+}
+
+.faqs div {
+  padding: 10px;
+  font-size: 1rem;
+  background-color: #ffc2ae;
+  margin: 5px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(98, 41, 41, 0.2);
+}
+
+.faqs h3 {
+  color: #141313;
+}
+.faqs p {
+  font-size: 1.2rem;
+  color: #1e1e1e;
+}
 @media (max-width: 768px) {
   .i1,
   .i2 {
@@ -162,5 +202,11 @@
   }
   .app_info div {
     margin-bottom: 20px;
+  }
+
+  .faqs{
+    flex-wrap: wrap;
+    margin: 0px 20px;
+    margin-top: 10px;
   }
 }

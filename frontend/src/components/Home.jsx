@@ -61,7 +61,9 @@ const Home = () => {
     let newIndices = new Set();
 
     while (newIndices.size < 3) {
-      const randomIndex = Math.floor(Math.random() * bloodDonationSlogans.length);
+      const randomIndex = Math.floor(
+        Math.random() * bloodDonationSlogans.length
+      );
       if (!prevIndices.includes(randomIndex)) {
         newIndices.add(randomIndex);
       }
@@ -96,7 +98,11 @@ const Home = () => {
     <div className={styles.home_container}>
       {showImages && (
         <div className={styles.imageContainer}>
-          <img src={images[currentImage]} alt="Transition" className={styles.transitionImage} />
+          <img
+            src={images[currentImage]}
+            alt="Transition"
+            className={styles.transitionImage}
+          />
         </div>
       )}
       <div className={styles.slogan}>
@@ -113,12 +119,36 @@ const Home = () => {
           <div key={index}>{bloodDonationSlogans[index]}</div>
         ))}
       </div>
-        
+      <div className={styles.faqsHeader}>
+        <div></div> <div className={styles.myDiv}>FAQs</div>
+        <div></div>
+      </div>
+
+      <div className={styles.faqs}>
         <div>
-          <div>
-            
-          </div>
+          <h3> Eligibility to Donate</h3>
+          <p>
+            Healthy individuals 16-18+ (varies), minimum weight, meeting health
+            criteria. Illnesses, meds, travel, tattoos can affect eligibility.
+            Check guidelines.
+          </p>
         </div>
+        <div>
+          <h3>The Donation Process</h3>
+          <p>
+            Registration, health check, blood draw (8-10mins),short rest with
+            refreshments. Takes about an hour. Sterile supplies used.
+          </p>
+        </div>
+
+        <div>
+          <h3>Frequency of Donation</h3>
+          <p>
+            Typically every 56 days (8 weeks) for whole blood. Platelets can be
+            more frequent. Follow recommended waiting periods.
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

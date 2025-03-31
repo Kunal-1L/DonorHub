@@ -384,7 +384,6 @@ sendNotification = async (deviceToken, title, body, data) => {
     token: deviceToken,
   };
 
-
   try {
     const response = await admin.messaging().send(message);
     return response;
@@ -394,8 +393,52 @@ sendNotification = async (deviceToken, title, body, data) => {
   }
 };
 
-app.post("/emergency-push", verifyToken, async (req, res) => {
+function isBloodCompatible(donorGroup, recipientGroup) {
+  donorGroup = donorGroup.toUpperCase();
+  recipientGroup = recipientGroup.toUpperCase();
 
+  if (donorGroup === recipientGroup) {
+    return true;
+  }
+
+  switch (donorGroup) {
+    case "O-":
+      return true;
+    case "O+":
+      return (
+        recipientGroup === "O+" ||
+        recipientGroup === "A+" ||
+        recipientGroup === "B+" ||
+        recipientGroup === "AB+"
+      );
+    case "A-":
+      return (
+        recipientGroup === "A-" ||
+        recipientGroup === "A+" ||
+        recipientGroup === "AB-" ||
+        recipientGroup === "AB+"
+      );
+    case "A+":
+      return recipientGroup === "A+" || recipientGroup === "AB+";
+    case "B-":
+      return (
+        recipientGroup === "B-" ||
+        recipientGroup === "B+" ||
+        recipientGroup === "AB-" ||
+        recipientGroup === "AB+"
+      );
+    case "B+":
+      return recipientGroup === "B+" || recipientGroup === "AB+";
+    case "AB-":
+      return recipientGroup === "AB-" || recipientGroup === "AB+";
+    case "AB+":
+      return false;
+    default:
+      return false;
+  }
+}
+
+app.post("/emergency-push", verifyToken, async (req, res) => {
   try {
     const info = {
       user_id: req.user_id,
@@ -408,7 +451,6 @@ app.post("/emergency-push", verifyToken, async (req, res) => {
       },
       medicalDoc: req.body.medicalDoc,
     };
-
 
     const emergencyRequest = new EmergencyBloodRequest(info);
     const savedEmergencyRequest = await emergencyRequest.save();
@@ -446,9 +488,14 @@ app.post("/emergency-push", verifyToken, async (req, res) => {
           user.latitude,
           user.longitude
         );
-        return distance <= 10 && user.bloodGroup == info.bloodGroup;
-      });
 
+        const isCompatible = isBloodCompatible(
+          user.bloodGroup,
+          info.bloodGroup
+        );
+
+        return distance <= 10 && isCompatible;
+      });
       const nearbyUserIds = nearbyUsers.map((user) => user.user_id);
 
       // Save userId and emergencyRequestId in DonorRequest
