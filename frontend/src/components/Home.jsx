@@ -113,7 +113,12 @@ const Home = () => {
           <div key={index}>{bloodDonationSlogans[index]}</div>
         ))}
       </div>
-      
+        
+        <div>
+          <div>
+            
+          </div>
+        </div>
     </div>
   );
 };
