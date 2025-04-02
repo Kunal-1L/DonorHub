@@ -22,13 +22,7 @@ const Navbar = () => {
       </div>
 
       <ul className={`${styles.navLinks} ${menuOpen ? styles.showMenu : ""}`}>
-        <li>
-          <input
-            className={styles.search}
-            type="text"
-            placeholder="Search...."
-          />
-        </li>
+       
         <li>
           <Link to="/why-donate">Why Donate</Link>
         </li>

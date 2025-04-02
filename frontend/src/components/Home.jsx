@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Home.module.css";
 import { useNavigate } from "react-router-dom";
+import Lottie from "lottie-react";
+import dashAni from "../../public/Dash(1).json";
 
 const images = ["/transition1.jpeg", "/transition2.jpeg", "/transition3.jpeg"];
 
@@ -98,21 +100,19 @@ const Home = () => {
     <div className={styles.home_container}>
       {showImages && (
         <div className={styles.imageContainer}>
-          <img
-            src={images[currentImage]}
-            alt="Transition"
-            className={styles.transitionImage}
-          />
+          <div className={styles.slogan}>
+            <h1 className={styles.i1}>Donate Blood, </h1>
+            <h1 className={styles.i2}>Make a Difference</h1>
+          </div>
+          <Lottie animationData={dashAni} loop={true} className={styles.lottieAnimation}/>
+
         </div>
       )}
-      <div className={styles.slogan}>
-        <h1 className={styles.i1}>Donate Blood, </h1>
-        <h1 className={styles.i2}>Make a Difference</h1>
-      </div>
+
       <div className={styles.app_info}>
-        <div onClick={handleEmergency}>Emergency Blood Request</div>
-        <div onClick={handleHostDrives}>Host Blood Drives</div>
-        <div onClick={handleExploreDrives}>Explore Drives</div>
+        <div onClick={handleEmergency}>Emergency Blood Request<div className={styles.underline}></div></div>
+        <div onClick={handleHostDrives}>Host Blood Drives<div className={styles.underline}></div></div>
+        <div onClick={handleExploreDrives}>Explore Drives<div className={styles.underline}></div></div>
       </div>
       <div className={styles.slogans}>
         {sloganIndices.map((index) => (

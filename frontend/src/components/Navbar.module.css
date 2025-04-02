@@ -59,14 +59,14 @@
 
 .navLinks li a {
   text-decoration: none;
-  color: #d32f2f;
+  color: #d32f2fed;
   font-weight: 500;
   padding: 0 1rem;
   transition: color 0.3s ease;
 }
 
 .navLinks li a:hover {
-  color: #ffebee;
+  color: #ca0321;
 }
 
 .authButtons {

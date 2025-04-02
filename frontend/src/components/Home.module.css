@@ -1,7 +1,21 @@
 .slogan {
   text-align: center;
   opacity: 0;
-  animation: fadeIn 2s forwards;
+  animation: slideRight 1s ease-in 1s forwards;
+}
+
+.slogan > h1 {
+  font-size: 5rem;
+}
+@keyframes slideRight {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0%);
+  }
 }
 
 .home_container {
@@ -19,27 +33,47 @@
   margin-top: 10px;
   font-size: 1.3rem;
   padding: 80px 50px;
-  background-image: linear-gradient(to bottom, #aaa 45%, #fcb69f 100%);
+  background-color: #E12431;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
 
-.app_info div {
+.app_info > div {
   color: #494949;
   cursor: pointer;
   font-family: "Roboto";
   width: 250px;
   text-align: center;
   padding: 15px 15px;
-  background-color: #fcb69f;
+  background-color: #ffc7cb;
   border-radius: 0.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   margin: 1rem 2rem;
 }
 
+.app_info div {
+  display: inline-block;
+  position: relative;
+}
+
+.underline {
+  position: absolute;
+  left: 0;
+  width: 80%;
+  transform: translateX(-50%);
+  height: 1px;
+  background-color: #cb1e1e;
+  transform: scaleX(0);
+  transform-origin: bottom left;
+  transition: transform 0.3s ease-in-out;
+}
+
+.app_info > div:hover .underline {
+  transform: scaleX(1);
+}
+
 .app_info div:hover {
-  text-decoration: underline;
-  color: #a81c1c;
+  color: #cb1e1e;
   transition-duration: 250ms;
   transition-property: all;
   transition-timing-function: ease-in-out;
@@ -54,40 +88,16 @@
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 .imageContainer {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   position: relative;
   overflow: hidden;
 }
 
-.transitionImage {
-  width: 100%;
-  height: 30rem;
-  opacity: 0;
-  animation: fadeImage 1.5s forwards;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 1) 70%,
-    rgba(0, 0, 0, 0) 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 1) 70%,
-    rgba(0, 0, 0, 0) 100%
-  );
+.lottieAnimation {
+  height: 90vh;
 }
 
 .slogans {
@@ -105,8 +115,7 @@
   font-size: 1.2rem;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(49, 31, 31, 0.2);
-  color: #d32f2f;
-  animation: fadeText 1s ease-in-out;
+  color: #EA4550;
   transition: transform 0.3s ease-in-out;
   text-align: center;
   padding: 50px 3% 5% 3%;
@@ -118,43 +127,26 @@
   transition: transform 0.3s ease-in-out;
 }
 
-@keyframes fadeText {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes fadeImage {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
+
 .faqsHeader {
   display: flex;
-  align-items: center; 
-  justify-content: center; 
-  gap: 10px; 
-  width: 100%; 
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
   margin-bottom: 10px;
 }
 
 .faqsHeader > div:first-child,
 .faqsHeader > div:last-child {
   flex-grow: 1;
-  height: 1px; 
-  background-color: #fa7575;
+  height: 1px;
+  background-color: #E12431;
 }
 
 .faqsHeader .myDiv {
-  padding: 0 10px; 
-  white-space: nowrap; 
+  padding: 0 10px;
+  white-space: nowrap;
   font-size: 2rem;
   font-weight: 800;
 }
@@ -169,14 +161,14 @@
 .faqs div {
   padding: 10px;
   font-size: 1rem;
-  background-color: #ffc2ae;
+  background-color: #e3e3e3;
   margin: 5px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(98, 41, 41, 0.2);
 }
 
 .faqs h3 {
-  color: #141313;
+  color: #E12431;
 }
 .faqs p {
   font-size: 1.2rem;
@@ -187,9 +179,32 @@
   .i2 {
     font-size: 2rem;
   }
+  .slogan {
+    animation: slideDown 0.5s ease-in 1s forwards;
+  }
 
-  .transitionImage {
-    width: 95%;
+  @keyframes slideDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-50%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0%);
+    }
+  }
+  .slogan > h1 {
+    font-size: 3rem;
+  }
+  .imageContainer {
+    flex-direction: column;
+  }
+  .underline {
+    top: 8px;
+  }
+  .lottieAnimation {
+    height: 50vh;
+    width: 100%;
   }
 
   .slogans > div {
@@ -202,9 +217,10 @@
   }
   .app_info div {
     margin-bottom: 20px;
+    top: 5px;
   }
 
-  .faqs{
+  .faqs {
     flex-wrap: wrap;
     margin: 0px 20px;
     margin-top: 10px;
