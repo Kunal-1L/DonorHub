@@ -63,11 +63,29 @@
   font-weight: 500;
   padding: 0 1rem;
   transition: color 0.3s ease;
+  position: relative;
+}
+
+.underline {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background-color: #cb1e1e;
+  transform: scaleX(0);
+  transform-origin: bottom left;
+  transition: transform 0.3s ease-in-out;
+  bottom: -12px; 
 }
 
 .navLinks li a:hover {
   color: #ca0321;
 }
+
+.navLinks li a:hover .underline {
+  transform: scaleX(1);
+}
+
 
 .authButtons {
   display: flex;

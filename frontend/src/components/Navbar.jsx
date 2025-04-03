@@ -24,10 +24,10 @@ const Navbar = () => {
       <ul className={`${styles.navLinks} ${menuOpen ? styles.showMenu : ""}`}>
        
         <li>
-          <Link to="/why-donate">Why Donate</Link>
+          <Link to="/why-donate">Why Donate<div className={styles.underline}></div></Link>
         </li>
         <li>
-          <Link to="/blood-drives">Blood Drives</Link>
+          <Link to="/blood-drives">Blood Drives<div className={styles.underline}></div></Link>
         </li>
       </ul>
 

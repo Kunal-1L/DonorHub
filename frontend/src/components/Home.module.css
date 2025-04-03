@@ -4,7 +4,6 @@
   animation: slideRight 1s ease-in 1s forwards;
 }
 
-
 @keyframes slideRight {
   0% {
     opacity: 0;
@@ -31,7 +30,7 @@
   margin-top: 10px;
   font-size: 1.3rem;
   padding: 80px 50px;
-  background-color: #E12431;
+  background-color: #e12431;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
@@ -59,7 +58,7 @@
   left: 0;
   width: 80%;
   transform: translateX(-50%);
-  height: 1px;
+  height: 1.5px;
   background-color: #cb1e1e;
   transform: scaleX(0);
   transform-origin: bottom left;
@@ -113,7 +112,7 @@
   font-size: 1.2rem;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(49, 31, 31, 0.2);
-  color: #EA4550;
+  color: #ea4550;
   transition: transform 0.3s ease-in-out;
   text-align: center;
   padding: 50px 3% 5% 3%;
@@ -124,7 +123,6 @@
   box-shadow: 0 4px 8px rgba(223, 2, 2, 0.589);
   transition: transform 0.3s ease-in-out;
 }
-
 
 .faqsHeader {
   display: flex;
@@ -139,7 +137,7 @@
 .faqsHeader > div:last-child {
   flex-grow: 1;
   height: 1px;
-  background-color: #E12431;
+  background-color: #e12431;
 }
 
 .faqsHeader .myDiv {
@@ -166,18 +164,17 @@
 }
 
 .faqs h3 {
-  color: #E12431;
+  color: #e12431;
 }
 .faqs p {
   font-size: 1.2rem;
   color: #1e1e1e;
 }
 @media (max-width: 768px) {
-  .i1
-   {
+  .i1 {
     font-size: 3rem;
   }
-  .i2{
+  .i2 {
     font-size: 2.5rem;
   }
   .slogan {
@@ -194,7 +191,7 @@
       transform: translateY(0%);
     }
   }
-  
+
   .imageContainer {
     flex-direction: column;
   }
