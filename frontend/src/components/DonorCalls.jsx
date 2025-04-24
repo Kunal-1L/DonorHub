@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "./Loading";
 import styles from "./DonorCalls.module.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -28,6 +30,27 @@ const DonorCalls = () => {
     };
     fetchDonorCalls();
   }, [userData?.token]);
+
+  const handleReqRes = async (request_id) => {
+    alert(request_id);
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/donor-req-res`,
+        { request_id },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData?.token}`,
+          },
+        }
+      );
+
+    } catch (error) {
+      toast.error("Error fetching donor calls");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return <Loading />;
@@ -69,6 +92,12 @@ const DonorCalls = () => {
                     <span className={styles.detailLabel}>Request Date:</span>{" "}
                     {new Date(req.createdAt).toLocaleDateString()}
                   </p>
+                  <button
+                    className={styles.reg_btn}
+                    onClick={() => handleReqRes(req._id)}
+                  >
+                    Respond To Request
+                  </button>
                 </div>
               </li>
             ))}

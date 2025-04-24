@@ -35,6 +35,7 @@ const {
   NotificationTokens,
   EmergencyBloodRequest,
   DonorRequest,
+  DonorCall,
 } = require("./model.js");
 
 // Load environment variables
@@ -498,6 +499,22 @@ app.post("/emergency-push", verifyToken, async (req, res) => {
       });
       const nearbyUserIds = nearbyUsers.map((user) => user.user_id);
 
+      // Save in DonorCalls all user_id to whom request is  made
+      if (DonorCall.findOne(req.user_id)) {
+        // means request is made within 3 days because their is buffer of 3 days and all request older than 3 delete and within this no other request could be made
+        return res
+          .status(400)
+          .json({ message: "Multiple Requests not allowed within 3 Days" });
+      } else {
+        // create a doucment
+        const newDonorCall = new DonorCall({
+          user_id: req.user_id,
+          request_id: emergencyRequestId,
+          requested_user_id: nearbyUserIds.map((id) => ({ req_user: id })),
+        });
+        await newDonorCall.save();
+      }
+
       // Save userId and emergencyRequestId in DonorRequest
       await Promise.all(
         nearbyUserIds.map(async (nearbyUserId) => {
@@ -609,6 +626,71 @@ app.get("/donor-calls", verifyToken, async (req, res) => {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 });
+
+app.post("/donor-req-res", verifyToken, async (req, res) => {
+  try {
+    const req_user = req.user_id;
+    const { request_id } = req.body;
+
+    const donorCall = await DonorCall.findOne({ request_id });
+
+    if (!donorCall) {
+      return res.status(404).json({ message: "DonorCall not found" });
+    }
+
+    let userFound = false;
+
+    // Update the interest_status for the matching req_user
+    donorCall.requested_user_id = donorCall.requested_user_id.map((entry) => {
+      if (entry.req_user === req_user) {
+        userFound = true;
+        return { ...entry._doc, interest_status: true };
+      }
+      return entry;
+    });
+
+    if (!userFound) {
+      return res.status(404).json({ message: "Requested user not found in donor call" });
+    }
+
+    await donorCall.save();
+
+    res.status(200).json({ message: "Your response is submitted and now caller contact you further" });
+  } catch (error) {
+    console.error("Error in /donor-req-res:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
+
+app.get("/donor-response", verifyToken, async (req, res) => {
+  try {
+    const donorCall = await DonorCall.findOne({ user_id: req.user_id });
+
+    if (!donorCall) {
+      return res.status(404).json({ message: "No donor call found for this user." });
+    }
+
+    const responses = donorCall.requested_user_id
+      .filter((entry) => entry.interest_status === true)
+      .map((entry) => entry.req_user);
+
+    
+    // Fetch user profiles for all interested users
+    const userProfiles = await UserProfile.find({ user_id: { $in: responses } })
+      .select("name age bloodGroup location phone") 
+      .lean();
+    
+
+    return res.status(200).json({ interestedUsers: userProfiles });
+  } catch (error) {
+    console.error("Error in /donor-response:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
 
 // Protected Route Example
 app.get("/dashboard", verifyToken, (req, res) => {

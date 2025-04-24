@@ -11,6 +11,7 @@ import Emergency from "./components/Emergency";
 import Footer from "./components/Footer";
 import DonorCalls from "./components/DonorCalls";
 import Error from "./components/Error";
+import DonorResponses from "./components/DonorResponses";
 function App() {
   
   
@@ -27,6 +28,7 @@ function App() {
         <Route path="/post-drive" element={<PostDrive />} />
         <Route path="/emergency-call" element={<Emergency />} />
         <Route path="/donor-calls" element={<DonorCalls/>} />
+        <Route path="/donor-responses" element={<DonorResponses/>} />
         <Route path="*" element={<Error />} />
       </Routes>
       <Footer />
