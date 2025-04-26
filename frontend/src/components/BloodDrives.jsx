@@ -217,7 +217,7 @@ const BloodDrives = () => {
             </div>
           ))
         ) : (
-          <div className={styles.not_found}>No blood drives available.</div>
+          <div className={styles.not_found} style={{fontSize: "20px"}}>No blood drives available.</div>
         )}
         {
           <div ref={divRef1} id="drive-details">

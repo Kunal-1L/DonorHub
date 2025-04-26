@@ -57,7 +57,7 @@ const DonorCalls = () => {
   }
 
   if (!donorCallsData) {
-    return <p>No donor call information available.</p>;
+    return <div className={styles.container} style={{minHeight: "50vh",  fontSize:"20px"}}>No donor call information available.</div>
   }
 
   const { request } = donorCallsData;
@@ -103,7 +103,7 @@ const DonorCalls = () => {
             ))}
           </ul>
         ) : (
-          <div className={styles.not_found}>
+          <div className={styles.not_found} style={{fontSize: "20px"}}>
             {donorCallsData.message || "No active donor calls found."}
           </div>
         )}

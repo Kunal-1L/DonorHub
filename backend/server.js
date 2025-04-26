@@ -58,7 +58,9 @@ const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins = [
       "https://donor-hub-eight.vercel.app",
-      "http://localhost:5173",
+      "http://localhost:5174",
+      "http://localhost:3000",
+      "http://localhost:8000",
     ];
 
     if (allowedOrigins.includes(origin) || !origin) {
@@ -498,15 +500,13 @@ app.post("/emergency-push", verifyToken, async (req, res) => {
         return distance <= 10 && isCompatible;
       });
       const nearbyUserIds = nearbyUsers.map((user) => user.user_id);
+      const existingCall = await DonorCall.findOne({ user_id: req.user_id });
 
-      // Save in DonorCalls all user_id to whom request is  made
-      if (DonorCall.findOne(req.user_id)) {
-        // means request is made within 3 days because their is buffer of 3 days and all request older than 3 delete and within this no other request could be made
+      if (existingCall !== null) {
         return res
           .status(400)
           .json({ message: "Multiple Requests not allowed within 3 Days" });
       } else {
-        // create a doucment
         const newDonorCall = new DonorCall({
           user_id: req.user_id,
           request_id: emergencyRequestId,
@@ -650,38 +650,40 @@ app.post("/donor-req-res", verifyToken, async (req, res) => {
     });
 
     if (!userFound) {
-      return res.status(404).json({ message: "Requested user not found in donor call" });
+      return res
+        .status(404)
+        .json({ message: "Requested user not found in donor call" });
     }
 
     await donorCall.save();
 
-    res.status(200).json({ message: "Your response is submitted and now caller contact you further" });
+    res.status(200).json({
+      message: "Your response is submitted and now caller contact you further",
+    });
   } catch (error) {
     console.error("Error in /donor-req-res:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-
-
 app.get("/donor-response", verifyToken, async (req, res) => {
   try {
     const donorCall = await DonorCall.findOne({ user_id: req.user_id });
 
     if (!donorCall) {
-      return res.status(404).json({ message: "No donor call found for this user." });
+      return res
+        .status(404)
+        .json({ message: "No donor call found for this user." });
     }
 
     const responses = donorCall.requested_user_id
       .filter((entry) => entry.interest_status === true)
       .map((entry) => entry.req_user);
 
-    
     // Fetch user profiles for all interested users
     const userProfiles = await UserProfile.find({ user_id: { $in: responses } })
-      .select("name age bloodGroup location phone") 
+      .select("name age bloodGroup location phone")
       .lean();
-    
 
     return res.status(200).json({ interestedUsers: userProfiles });
   } catch (error) {
@@ -689,8 +691,6 @@ app.get("/donor-response", verifyToken, async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
-
 
 // Protected Route Example
 app.get("/dashboard", verifyToken, (req, res) => {
