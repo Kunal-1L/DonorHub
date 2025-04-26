@@ -37,7 +37,7 @@ const DonorResponses = () => {
   }
 
   if (!donorResponseData || donorResponseData.length === 0) {
-    return <p>No donor response information available.</p>;
+    return <p className={styles.container}> No donor response information available.</p>;
   }
   
   return (
