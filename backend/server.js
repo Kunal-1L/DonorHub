@@ -644,6 +644,11 @@ app.post("/donor-req-res", verifyToken, async (req, res) => {
     donorCall.requested_user_id = donorCall.requested_user_id.map((entry) => {
       if (entry.req_user === req_user) {
         userFound = true;
+        // if (entry.interest_status === true) {
+        //   return res
+        //     .status(404)
+        //     .json({ message: "Your response is already submitted and now caller contact you further" });
+        // }
         return { ...entry._doc, interest_status: true };
       }
       return entry;

@@ -32,7 +32,6 @@ const DonorCalls = () => {
   }, [userData?.token]);
 
   const handleReqRes = async (request_id) => {
-    alert(request_id);
     try {
       const response = await axios.post(
         `${API_BASE_URL}/donor-req-res`,
@@ -44,7 +43,7 @@ const DonorCalls = () => {
           },
         }
       );
-
+      toast.success(response.message);
     } catch (error) {
       toast.error("Error fetching donor calls");
     } finally {
