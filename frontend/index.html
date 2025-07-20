@@ -3,18 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="fav.png" type="image/x-icon">
+    <link rel="icon" href="fav.png" type="image/x-icon" />
     <title>DonorHub</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        touch-action: manipulation;
+      }
+    </style>
   </head>
-  <style>
-    * {
-  user-select: none;
-  touch-action: manipulation;
-
-}
-
-  </style>
-  <body style="margin:0px; padding:0px;box-sizing: border-box;">
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
