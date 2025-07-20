@@ -17,13 +17,14 @@ const DonorResponses = () => {
     const fetchDonorResponse = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${API_BASE_URL}/donor-response`, {
+        const response = await axios.get(`${API_BASE_URL}/donor-responses`, {
           headers: {
             Authorization: `Bearer ${userData?.token}`,
           },
         });
         setDonorResponseData(response.data.interestedUsers);
       } catch (error) {
+        console.error("Error fetching donor responses:", error);
         toast.error("Error fetching donor responses");
       } finally {
         setLoading(false);

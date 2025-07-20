@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">DonorHub</string>
+    <string name="title_activity_main">DonorHub</string>
+    <string name="package_name">com.kunal.app</string>
+    <string name="custom_url_scheme">com.kunal.app</string>
+</resources>

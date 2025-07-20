@@ -1,0 +1,9 @@
+{
+  "appId": "com.kunal.app",
+  "appName": "DonorHub",
+  "webDir": "dist",
+  "server": {
+    "url": "https://donor-hub-eight.vercel.app/",
+    "cleartext": true
+  }
+}

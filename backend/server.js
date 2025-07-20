@@ -58,7 +58,7 @@ const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins = [
       "https://donor-hub-eight.vercel.app",
-      "http://localhost:5174",
+      "http://localhost:5173",
       "http://localhost:3000",
       "http://localhost:8000",
     ];
@@ -671,13 +671,13 @@ app.post("/donor-req-res", verifyToken, async (req, res) => {
   }
 });
 
-app.get("/donor-response", verifyToken, async (req, res) => {
+app.get("/donor-responses", verifyToken, async (req, res) => {
   try {
     const donorCall = await DonorCall.findOne({ user_id: req.user_id });
 
     if (!donorCall) {
       return res
-        .status(404)
+        .status(200)
         .json({ message: "No donor call found for this user." });
     }
 
