@@ -187,8 +187,10 @@
 }
 
 @media (max-width: 768px) {
+  
   .navbar {
     flex-wrap: wrap;
+    margin-top:15px;
   }
   .logo img {
     margin-bottom: 10px;

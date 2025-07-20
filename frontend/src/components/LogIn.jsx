@@ -109,9 +109,8 @@ const LogIn = () => {
   }, [userData, token]);
 
   return (
-    <>
+    <div className={styles.background}>
       <title>LogIn</title>
-      <div className={styles.container}>
         <div className={styles.signup_container}>
           <h2>Log In</h2>
           <form onSubmit={handleSubmit} autoComplete="off">
@@ -141,8 +140,7 @@ const LogIn = () => {
             </a>
           </div>
         </div>
-      </div>
-    </>
+    </div>
   );
 };
 

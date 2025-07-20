@@ -44,20 +44,11 @@ const Home = () => {
   useEffect(() => {
     const sloganTimeout = setTimeout(() => {
       setShowImages(true);
-    }, 2000);
+    }, 5);
 
     return () => clearTimeout(sloganTimeout);
   }, []);
 
-  useEffect(() => {
-    if (showImages) {
-      const interval = setInterval(() => {
-        setCurrentImage((prevIndex) => (prevIndex + 1) % images.length);
-      }, 3000);
-
-      return () => clearInterval(interval);
-    }
-  }, [showImages]);
 
   const getRandomIndices = (prevIndices) => {
     let newIndices = new Set();

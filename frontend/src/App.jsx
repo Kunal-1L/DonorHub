@@ -16,7 +16,7 @@ function App() {
   
   
   return (
-    <div >
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }} >
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />

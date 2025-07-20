@@ -1,12 +1,13 @@
-.container {
-  padding: 40px;
-  background: #fff;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+.background {
   background-image: linear-gradient(
     to bottom,
     rgb(255, 255, 255) 45%,
     #fcb69f 100%
   );
+  flex: 1;;
+  text-align: center;
+  padding: 40px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .not_found {

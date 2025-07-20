@@ -15,7 +15,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={styles.navbar}>
+    <div className={styles.navbar}>
       <div className={styles.logo} onClick={() => navigate("/")}>
         <img src="/Main.jpeg" alt="BloodLink" />
         <span>DonorHub</span>
@@ -68,7 +68,7 @@ const Navbar = () => {
           <FaBars size={24} />
         )}
       </button>
-    </nav>
+    </div>
   );
 };
 

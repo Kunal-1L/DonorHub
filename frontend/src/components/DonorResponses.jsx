@@ -38,13 +38,12 @@ const DonorResponses = () => {
   }
 
   if (!donorResponseData || donorResponseData.length === 0) {
-    return <div className={styles.container} style={{minHeight: "50vh", fontSize: "20px"}}> No donor response information available.</div>;
+    return <div className={styles.background} style={{minHeight: "50vh", fontSize: "20px"}}> No donor response information available.</div>;
   }
   
   return (
-    <>
+    <div className={styles.background}>
       <title>Donor Responses</title>
-      <div className={styles.container}>
         <h1>Donor Responses</h1>
         <ul className={styles.requestList}>
           {donorResponseData.map((res) => (
@@ -66,8 +65,7 @@ const DonorResponses = () => {
             </li>
           ))}
         </ul>
-      </div>
-    </>
+    </div>
   );
 }
   

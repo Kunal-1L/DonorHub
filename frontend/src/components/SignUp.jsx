@@ -61,9 +61,8 @@ const SignUp = () => {
   };
 
   return (
-    <>
+    <div className={styles.background} >
       <title>SignUp</title>
-      <div className={styles.container}>
         <div className={styles.signup_container}>
           <h2>Sign Up</h2>
           <form onSubmit={handleSubmit} autoComplete="off">
@@ -100,8 +99,7 @@ const SignUp = () => {
             </span>
           </div>
         </div>
-      </div>
-    </>
+    </div>
   );
 };
 
