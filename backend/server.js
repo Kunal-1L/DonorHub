@@ -677,7 +677,7 @@ app.get("/donor-response", verifyToken, async (req, res) => {
 
     if (!donorCall) {
       return res
-        .status(404)
+        .status(200)
         .json({ message: "No donor call found for this user." });
     }
 
