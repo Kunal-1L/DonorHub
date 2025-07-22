@@ -13,7 +13,6 @@ import DonorCalls from "./components/DonorCalls";
 import Error from "./components/Error";
 import DonorResponses from "./components/DonorResponses";
 import { useEffect } from "react";
-import { StatusBar } from '@capacitor/status-bar';
 import MyDrives from "./components/MyDrives";
 import { useNavigate } from "react-router-dom";
 function App() {
