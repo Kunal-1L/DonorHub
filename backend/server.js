@@ -36,6 +36,7 @@ const {
   EmergencyBloodRequest,
   DonorRequest,
   DonorCall,
+  DriveRegistration,
 } = require("./model.js");
 
 // Load environment variables
@@ -261,9 +262,9 @@ const getDistanceFromLatLon = (lat1, lon1, lat2, lon2) => {
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(degToRad(lat1)) *
-      Math.cos(degToRad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+    Math.cos(degToRad(lat2)) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c; // Distance in KM
@@ -288,9 +289,8 @@ app.get("/blood-drives", verifyToken, async (req, res) => {
       userLon = user.longitude;
     }
     const today = new Date();
-
     // Fetch upcoming blood drives
-    const bloodDrives = await BloodDrive.find({ date: { $gte: today } });
+    const bloodDrives = await BloodDrive.find({ date: { $gte: today }, user_id: { $ne: user_id } });
     // Filter drives within 10KM radius
     const drivesWithinRadius = bloodDrives.filter((drive) => {
       const driveLat = drive.latitude;
@@ -347,6 +347,12 @@ app.post("/donor-registration", verifyToken, async (req, res) => {
       if (!camp.registeredDonor.includes(donorId)) {
         camp.registeredDonor.push(donorId);
         await camp.save();
+        // update the drive registration
+        await DriveRegistration.findOneAndUpdate(
+          { driveId },
+          { $addToSet: { registeredDonor: donorId } },
+          { new: true, upsert: true }
+        );
       } else {
         res.status(200).json({ message: "You are already registered..." });
         return;
@@ -359,6 +365,40 @@ app.post("/donor-registration", verifyToken, async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
+app.get("/my-drives", verifyToken, async (req, res) => {
+  console.log("Fetching user's drives...");
+  try {
+    const user_id = req.user_id;
+    // filter drives by user_id to get time, title, poster name, and location
+    const drives = await BloodDrive.find({ user_id }, {
+      title: 1,
+      poster: 1,
+      location: 1,
+      time: 1,
+      date: 1
+    }
+    );
+    const result = await DonorRegistration.aggregate([
+      { $match: { user_id } },
+      {
+        $project: {
+          driveId: 1,
+          registeredDonorCount: { $size: "$registeredDonor" }
+        }
+      }
+    ]);
+
+    if (drives.length === 0) {
+      return res.status(200).json({ message: "No drives found for this user" });
+    }
+    res.status(200).json([drives, result]);
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+);
+
 
 app.post("/save-token", verifyToken, async (req, res) => {
   try {

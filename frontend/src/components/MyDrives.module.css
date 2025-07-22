@@ -1,0 +1,61 @@
+.background {
+    background-image: linear-gradient(to bottom,
+            rgb(255, 255, 255) 45%,
+            #fcb69f 100%);
+    flex: 1;
+    ;
+    padding: 40px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    margin-bottom: 40px;
+}
+
+.driveList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.driveCard {
+    width: 100%;
+    max-width: 600px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.driveCard img {
+    width: 200px;
+    height: 200px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.driveCard a{
+    text-decoration: none;
+    color: #b85151;
+}
+
+.driveCard a:hover {
+    color: #ee4848;
+}
+.driveCard h2 {
+    margin: 0 0 10px;
+    color: #ee4848;
+}
+
+.driveCard span {
+    color: #007bff;
+    font-size: 1.2rem;
+    margin-right: 5px;
+}
+
+.driveCard p {
+    margin: 5px 0;
+    color: #555;
+}

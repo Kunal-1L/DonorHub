@@ -77,7 +77,7 @@ const DonorCalls = () => {
                   </p>
                   <p>
                     <span className={styles.detailLabel}>Location:</span>{" "}
-                    {req.location}
+                    <a href={`https://www.google.com/maps?q=${encodeURIComponent(drive.location)}`} target="_blank"></a>
                   </p>
                   <p>
                     <span className={styles.detailLabel}>Contact Name:</span>{" "}

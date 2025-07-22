@@ -90,30 +90,28 @@ const BloodDrives = () => {
        <span id="close_button">\u00D7</span>
         </h2>
         <p><strong>Organizer:</strong> ${drive.organizer}</p>
-        <p><strong>Location:</strong> ${drive.location}</p>
+        
+        <p><strong>Location:</strong> ${<a href={`https://www.google.com/maps?q=${encodeURIComponent(drive.location)}`} target="_blank">
+        </a>}</p>
         <p><strong>Date:</strong> ${new Date(
           drive.date
         ).toLocaleDateString()}</p>
-        <p><strong>Time:</strong> ${drive.time.startTime} - ${
-        drive.time.endTime
-      }</p>
-        ${
-          drive.poster
-            ? `<img src="${drive.poster}" alt="Drive Poster" style="max-width: 300px;"/>`
-            : ""
-        }
-        <p><strong>Description:</strong> ${
-          drive.description || "No description provided."
+        <p><strong>Time:</strong> ${drive.time.startTime} - ${drive.time.endTime
         }</p>
-        ${
-          drive.contact
-            ? `
+        ${drive.poster
+          ? `<img src="${drive.poster}" alt="Drive Poster" style="max-width: 300px;"/>`
+          : ""
+        }
+        <p><strong>Description:</strong> ${drive.description || "No description provided."
+        }</p>
+        ${drive.contact
+          ? `
           <h3>Contact Information</h3>
           <p><strong>Name:</strong> ${drive.contact.name || "N/A"}</p>
           <p><strong>Phone:</strong> ${drive.contact.phone || "N/A"}</p>
           <p><strong>Email:</strong> ${drive.contact.email || "N/A"}</p>
         `
-            : ""
+          : ""
         }
       `;
       detailsContainer.className = styles.drive_details;
@@ -168,6 +166,15 @@ const BloodDrives = () => {
     }
     navigate("/emergency-call");
   };
+
+  const handleMyDrives = () => {
+    if (!userData) {
+      navigate("/login");
+    }
+    else {
+      navigate("/my-drives");
+    }
+  }
   return (
     <>
       <title>Blood Drives</title>
@@ -183,6 +190,9 @@ const BloodDrives = () => {
         </button>
         <button className={styles.post_btn} onClick={handleEmergencyClick}>
           Emergency Blood
+        </button>
+        <button className={styles.post_btn} onClick={() => handleMyDrives()}>
+          My Drives
         </button>
         {drives.length > 0 ? (
           drives.map((drive, index) => (
@@ -217,7 +227,7 @@ const BloodDrives = () => {
             </div>
           ))
         ) : (
-          <div className={styles.not_found} style={{fontSize: "20px"}}>No blood drives available.</div>
+          <div className={styles.not_found} style={{ fontSize: "20px" }}>No blood drives available near you.</div>
         )}
         {
           <div ref={divRef1} id="drive-details">

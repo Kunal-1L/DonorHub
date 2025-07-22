@@ -1,4 +1,4 @@
-import { Route, Routes, useSearchParams } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import WhyDonate from "./components/WhyDonate";
 import Home from "./components/Home";
 import SignUp from "./components/SignUp";
@@ -14,13 +14,30 @@ import Error from "./components/Error";
 import DonorResponses from "./components/DonorResponses";
 import { useEffect } from "react";
 import { StatusBar } from '@capacitor/status-bar';
-
+import MyDrives from "./components/MyDrives";
+import { useNavigate } from "react-router-dom";
 function App() {
   
   useEffect(() => {
     StatusBar.setOverlaysWebView({ overlay: false });
     StatusBar.setBackgroundColor({ color: '#ffffff' });
     StatusBar.setStyle({ style: 'DARK' });
+  }, []);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const userData = JSON.parse(sessionStorage.getItem("userData"));
+    if (userData?.token) {
+      const decoded = jwt_decode(userData.token);
+      const currentTime = Date.now() / 1000; // in seconds
+
+      if (decoded.exp < currentTime) {
+        // Token expired
+        sessionStorage.removeItem("userData");
+        navigate("/signup"); // or "/login"
+      }
+    }
   }, []);
 
 
@@ -38,6 +55,7 @@ function App() {
         <Route path="/emergency-call" element={<Emergency />} />
         <Route path="/donor-calls" element={<DonorCalls/>} />
         <Route path="/donor-responses" element={<DonorResponses/>} />
+        <Route path="/my-drives" element={<MyDrives />} />
         <Route path="*" element={<Error />} />
       </Routes>
       <Footer />

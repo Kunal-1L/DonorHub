@@ -94,6 +94,8 @@ const Emergency = () => {
 
   return (
     <>
+                  <ExpiryTokenCheck />
+
       <title>Emergency Blood</title>
       <div className={styles.container}>
         <div className={styles.drive_post_cont}>

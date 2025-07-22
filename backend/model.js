@@ -153,6 +153,16 @@ const DonorCallSchema = new mongoose.Schema({
 
 const DonorCall = mongoose.model("DonorCall", DonorCallSchema);
 
+const DriveRegistrationSchema = new mongoose.Schema({
+  driveId: { type: String, required: true, unique: true },
+  registeredDonor: [{ type: String, required: true }],
+});
+
+const DriveRegistration = mongoose.model(
+  "DriveRegistration",
+  DriveRegistrationSchema
+);
+
 module.exports = {
   Users,
   UserProfile,
@@ -163,4 +173,5 @@ module.exports = {
   EmergencyBloodRequest,
   DonorRequest,
   DonorCall,
+  DriveRegistration
 };
