@@ -17,11 +17,6 @@ import MyDrives from "./components/MyDrives";
 import { useNavigate } from "react-router-dom";
 function App() {
   
-  useEffect(() => {
-    StatusBar.setOverlaysWebView({ overlay: false });
-    StatusBar.setBackgroundColor({ color: '#ffffff' });
-    StatusBar.setStyle({ style: 'DARK' });
-  }, []);
 
   const navigate = useNavigate();
 
