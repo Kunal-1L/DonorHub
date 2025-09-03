@@ -4,12 +4,11 @@
     rgb(255, 255, 255) 45%,
     #fcb69f 100%
   );
-  flex: 1;;
+  flex: 1;
   text-align: center;
   padding: 40px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
-
 
 .signup_container {
   width: 320px;
@@ -21,9 +20,6 @@
   text-align: center;
   flex: 1;
 }
-
-
-
 
 .signup_container h2 {
   margin-bottom: 20px;

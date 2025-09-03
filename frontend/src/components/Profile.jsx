@@ -55,7 +55,7 @@ const Profile = () => {
     if (inputValue.length > 2) {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/location-suggestions?q=${inputValue}`
+          `${API_BASE_URL}/location-suggestions?q=${inputValue}`,
         );
         setSuggestions(response.data || []);
       } catch (error) {
@@ -89,7 +89,7 @@ const Profile = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.status === 200) {

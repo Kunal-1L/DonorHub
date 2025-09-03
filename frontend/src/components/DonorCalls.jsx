@@ -41,7 +41,7 @@ const DonorCalls = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${userData?.token}`,
           },
-        }
+        },
       );
       toast.success(response.message);
     } catch (error) {
@@ -51,12 +51,15 @@ const DonorCalls = () => {
     }
   };
 
-  if (loading) {
-    return <Loading />;
-  }
-
   if (!donorCallsData) {
-    return <div className={styles.container} style={{minHeight: "50vh",  fontSize:"20px"}}>No donor call information available.</div>
+    return (
+      <div
+        className={styles.container}
+        style={{ minHeight: "50vh", fontSize: "20px" }}
+      >
+        No donor call information available.
+      </div>
+    );
   }
 
   const { request } = donorCallsData;
@@ -77,7 +80,10 @@ const DonorCalls = () => {
                   </p>
                   <p>
                     <span className={styles.detailLabel}>Location:</span>{" "}
-                    <a href={`https://www.google.com/maps?q=${encodeURIComponent(drive.location)}`} target="_blank"></a>
+                    <a
+                      href={`https://www.google.com/maps?q=${encodeURIComponent(drive.location)}`}
+                      target="_blank"
+                    ></a>
                   </p>
                   <p>
                     <span className={styles.detailLabel}>Contact Name:</span>{" "}
@@ -102,7 +108,7 @@ const DonorCalls = () => {
             ))}
           </ul>
         ) : (
-          <div className={styles.not_found} style={{fontSize: "20px"}}>
+          <div className={styles.not_found} style={{ fontSize: "20px" }}>
             {donorCallsData.message || "No active donor calls found."}
           </div>
         )}

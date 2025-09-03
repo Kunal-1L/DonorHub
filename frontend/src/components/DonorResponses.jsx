@@ -32,15 +32,14 @@ const DonorResponses = () => {
     fetchDonorResponse();
   }, [userData?.token]);
 
-  if (loading) {
-    return <Loading />;
-  }
-
   if (!donorResponseData || donorResponseData.length === 0) {
     return (
       <div className={styles.background}>
         <h1>Donor Responses</h1>
-        <div className={styles.container} style={{ minHeight: "50vh", fontSize: "20px" }}>
+        <div
+          className={styles.container}
+          style={{ minHeight: "50vh", fontSize: "20px" }}
+        >
           No donor responses available.
         </div>
       </div>
@@ -58,13 +57,19 @@ const DonorResponses = () => {
                 <span className={styles.detailLabel}>Name:</span> {res.name}
               </p>
               <p>
-                <span className={styles.detailLabel}>Blood Group:</span> {res.bloodGroup}
+                <span className={styles.detailLabel}>Blood Group:</span>{" "}
+                {res.bloodGroup}
               </p>
               <p>
-                <span className={styles.detailLabel}>Location:</span> <a href={`https://www.google.com/maps?q=${encodeURIComponent(drive.location)}`} target="_blank"></a>
+                <span className={styles.detailLabel}>Location:</span>{" "}
+                <a
+                  href={`https://www.google.com/maps?q=${encodeURIComponent(drive.location)}`}
+                  target="_blank"
+                ></a>
               </p>
               <p>
-                <span className={styles.detailLabel}>Contact Number:</span> {res.phone}
+                <span className={styles.detailLabel}>Contact Number:</span>{" "}
+                {res.phone}
               </p>
             </div>
           </li>

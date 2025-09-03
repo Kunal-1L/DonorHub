@@ -8,7 +8,7 @@ const Loading = () => {
       <Lottie
         animationData={loadingAnimation}
         loop={true}
-        style={{ width: 100, height: 100 }}
+        className={styles.spinner_custom}
       />
     </div>
   );

@@ -1,8 +1,8 @@
 importScripts(
-  "https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"
+  "https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js",
 );
 importScripts(
-  "https://www.gstatic.com/firebasejs/9.15.0/firebase-messaging-compat.js"
+  "https://www.gstatic.com/firebasejs/9.15.0/firebase-messaging-compat.js",
 );
 
 const firebaseConfig = {
@@ -31,6 +31,6 @@ messaging.onBackgroundMessage(function (payload) {
 
   return self.registration.showNotification(
     notificationTitle,
-    notificationOptions
+    notificationOptions,
   );
 });

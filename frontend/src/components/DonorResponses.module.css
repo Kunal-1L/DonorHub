@@ -4,7 +4,7 @@
     rgb(255, 255, 255) 45%,
     #fcb69f 100%
   );
-  flex: 1;;
+  flex: 1;
   padding: 40px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }

@@ -31,12 +31,11 @@ const {
   UserProfile,
   HospitalProfile,
   BloodDrive,
-  DonorRegistration,
   NotificationTokens,
   EmergencyBloodRequest,
   DonorRequest,
   DonorCall,
-  DriveRegistration,
+  DonorRegistration,
 } = require("./model.js");
 
 // Load environment variables
@@ -119,7 +118,7 @@ app.get("/location-suggestions", async (req, res) => {
           limit: 5,
           format: "json",
         },
-      }
+      },
     );
 
     if (!response.data || response.data.length === 0) {
@@ -130,7 +129,7 @@ app.get("/location-suggestions", async (req, res) => {
   } catch (error) {
     console.error(
       "Error fetching LocationIQ suggestions:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     res.status(500).json({ error: "Error fetching location suggestions" });
   }
@@ -191,7 +190,7 @@ app.post("/profile", verifyToken, async (req, res) => {
       `https://us1.locationiq.com/v1/search.php`,
       {
         params: { key: LOCATIONIQ_API_KEY, q: location, format: "json" },
-      }
+      },
     );
 
     if (response.data.length === 0) {
@@ -211,7 +210,7 @@ app.post("/profile", verifyToken, async (req, res) => {
       });
       await Users.updateOne(
         { user_id: req.user_id },
-        { $set: { profile_completed: true } }
+        { $set: { profile_completed: true } },
       );
       await profile.save();
       res.status(200).json({ message: "User Profile Created", profile });
@@ -227,7 +226,7 @@ app.post("/profile", verifyToken, async (req, res) => {
       await profile.save();
       await Users.updateOne(
         { user_id: req.user_id },
-        { $set: { profile_completed: true } }
+        { $set: { profile_completed: true } },
       );
       res.status(200).json({ message: "Hospital Profile Created", profile });
     }
@@ -262,9 +261,9 @@ const getDistanceFromLatLon = (lat1, lon1, lat2, lon2) => {
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(degToRad(lat1)) *
-    Math.cos(degToRad(lat2)) *
-    Math.sin(dLon / 2) *
-    Math.sin(dLon / 2);
+      Math.cos(degToRad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c; // Distance in KM
@@ -290,7 +289,10 @@ app.get("/blood-drives", verifyToken, async (req, res) => {
     }
     const today = new Date();
     // Fetch upcoming blood drives
-    const bloodDrives = await BloodDrive.find({ date: { $gte: today }, user_id: { $ne: user_id } });
+    const bloodDrives = await BloodDrive.find({
+      date: { $gte: today },
+      user_id: { $ne: user_id },
+    });
     // Filter drives within 10KM radius
     const drivesWithinRadius = bloodDrives.filter((drive) => {
       const driveLat = drive.latitude;
@@ -312,7 +314,7 @@ app.post("/post-drive", verifyToken, async (req, res) => {
       "https://us1.locationiq.com/v1/search.php",
       {
         params: { key: LOCATIONIQ_API_KEY, q: location, format: "json" },
-      }
+      },
     );
 
     if (response.data.length === 0) {
@@ -348,10 +350,10 @@ app.post("/donor-registration", verifyToken, async (req, res) => {
         camp.registeredDonor.push(donorId);
         await camp.save();
         // update the drive registration
-        await DriveRegistration.findOneAndUpdate(
+        await DonorRegistration.findOneAndUpdate(
           { driveId },
           { $addToSet: { registeredDonor: donorId } },
-          { new: true, upsert: true }
+          { new: true, upsert: true },
         );
       } else {
         res.status(200).json({ message: "You are already registered..." });
@@ -371,22 +373,24 @@ app.get("/my-drives", verifyToken, async (req, res) => {
   try {
     const user_id = req.user_id;
     // filter drives by user_id to get time, title, poster name, and location
-    const drives = await BloodDrive.find({ user_id }, {
-      title: 1,
-      poster: 1,
-      location: 1,
-      time: 1,
-      date: 1
-    }
+    const drives = await BloodDrive.find(
+      { user_id },
+      {
+        title: 1,
+        poster: 1,
+        location: 1,
+        time: 1,
+        date: 1,
+      },
     );
     const result = await DonorRegistration.aggregate([
       { $match: { user_id } },
       {
         $project: {
           driveId: 1,
-          registeredDonorCount: { $size: "$registeredDonor" }
-        }
-      }
+          registeredDonorCount: { $size: "$registeredDonor" },
+        },
+      },
     ]);
 
     if (drives.length === 0) {
@@ -396,9 +400,7 @@ app.get("/my-drives", verifyToken, async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
   }
-}
-);
-
+});
 
 app.post("/save-token", verifyToken, async (req, res) => {
   try {
@@ -408,7 +410,7 @@ app.post("/save-token", verifyToken, async (req, res) => {
     await NotificationTokens.findOneAndUpdate(
       { user_id },
       { $set: { token: token } },
-      { new: true, upsert: true }
+      { new: true, upsert: true },
     );
     res.status(200).json({ message: "Successfully done" });
   } catch (error) {
@@ -512,7 +514,7 @@ app.post("/emergency-push", verifyToken, async (req, res) => {
         `https://us1.locationiq.com/v1/search.php`,
         {
           params: { key: LOCATIONIQ_API_KEY, q: location, format: "json" },
-        }
+        },
       );
 
       if (response.data.length === 0) {
@@ -529,12 +531,12 @@ app.post("/emergency-push", verifyToken, async (req, res) => {
           userLat,
           userLon,
           user.latitude,
-          user.longitude
+          user.longitude,
         );
 
         const isCompatible = isBloodCompatible(
           user.bloodGroup,
-          info.bloodGroup
+          info.bloodGroup,
         );
 
         return distance <= 10 && isCompatible;
@@ -578,10 +580,10 @@ app.post("/emergency-push", verifyToken, async (req, res) => {
           } catch (error) {
             console.error(
               `Error updating/creating DonorRequest for user ${nearbyUserId}:`,
-              error
+              error,
             );
           }
-        })
+        }),
       );
 
       const tokens = await NotificationTokens.find({
@@ -597,13 +599,13 @@ app.post("/emergency-push", verifyToken, async (req, res) => {
             token.token,
             notificationTitle,
             notificationBody,
-            { location: info.location, bloodGroup: info.bloodGroup }
+            { location: info.location, bloodGroup: info.bloodGroup },
           );
           return response;
         } catch (error) {
           console.error(
             `Error sending notification to ${token.user_id} (${token.token}):`,
-            error
+            error,
           );
           return null;
         }
@@ -614,7 +616,7 @@ app.post("/emergency-push", verifyToken, async (req, res) => {
     } catch (locationError) {
       console.error(
         "Error fetching coordinates from LocationIQ:",
-        locationError
+        locationError,
       );
       return res.status(500).json({
         message: "Error fetching location coordinates",
@@ -651,10 +653,10 @@ app.get("/donor-calls", verifyToken, async (req, res) => {
       await DonorRequest.findOneAndUpdate(
         { user_id: user_id },
         { $pull: { request: { $in: expiredRequestIds } } },
-        { new: true }
+        { new: true },
       );
       donorRequest = await DonorRequest.findOne({ user_id: user_id }).populate(
-        "request"
+        "request",
       );
     }
 
@@ -680,15 +682,9 @@ app.post("/donor-req-res", verifyToken, async (req, res) => {
 
     let userFound = false;
 
-    // Update the interest_status for the matching req_user
     donorCall.requested_user_id = donorCall.requested_user_id.map((entry) => {
       if (entry.req_user === req_user) {
         userFound = true;
-        // if (entry.interest_status === true) {
-        //   return res
-        //     .status(404)
-        //     .json({ message: "Your response is already submitted and now caller contact you further" });
-        // }
         return { ...entry._doc, interest_status: true };
       }
       return entry;
@@ -745,5 +741,5 @@ app.get("/dashboard", verifyToken, (req, res) => {
 // Start Server
 const PORT = 8000;
 app.listen(PORT, () =>
-  console.log(`🚀 Server running on http://localhost:${PORT}`)
+  console.log(`🚀 Server running on http://localhost:${PORT}`),
 );

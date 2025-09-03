@@ -22,12 +22,15 @@ const Navbar = () => {
       </div>
 
       <ul className={`${styles.navLinks} ${menuOpen ? styles.showMenu : ""}`}>
-       
         <li>
-          <Link to="/why-donate">Why Donate<div className={styles.underline}></div></Link>
+          <Link to="/why-donate">
+            Why Donate<div className={styles.underline}></div>
+          </Link>
         </li>
         <li>
-          <Link to="/blood-drives">Blood Drives<div className={styles.underline}></div></Link>
+          <Link to="/blood-drives">
+            Blood Drives<div className={styles.underline}></div>
+          </Link>
         </li>
       </ul>
 
@@ -41,7 +44,9 @@ const Navbar = () => {
             <div className={styles.profileDropdown}>
               <div onClick={() => navigate("/profile")}>My Profile</div>
               <div onClick={() => navigate("/donor-calls")}>Donor Calls</div>
-              <div onClick={() => navigate("/donor-responses")}>Donor Responses</div>
+              <div onClick={() => navigate("/donor-responses")}>
+                Donor Responses
+              </div>
               <div onClick={handleLogOut}>Log Out</div>
             </div>
           )}

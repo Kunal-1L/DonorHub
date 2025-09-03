@@ -37,7 +37,7 @@ const PostDrive = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${userData?.token}`,
           },
-        }
+        },
       );
 
       if (response.status === 200) {
@@ -100,11 +100,11 @@ const PostDrive = () => {
     if (inputValue.length > 2) {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/location-suggestions?q=${inputValue}`
+          `${API_BASE_URL}/location-suggestions?q=${inputValue}`,
         );
         setSuggestions(response.data || []);
       } catch (error) {
-        setSuggestions([]); 
+        setSuggestions([]);
       }
     } else {
       setSuggestions([]);
@@ -113,72 +113,72 @@ const PostDrive = () => {
 
   return (
     <>
-    <title>Post Drive</title>
-    <div className={styles.container}>
-      <div className={styles.drive_post_cont}>
-        <h1 className={styles.heading}>Create Blood Drive</h1>
-        <h3>Donate Today, Save Tomorrow</h3>
-        <form onSubmit={handleSubmit} className={styles.formContainer}>
-          <label>Title:</label>
-          <input type="text" ref={titleRef} required />
+      <title>Post Drive</title>
+      <div className={styles.container}>
+        <div className={styles.drive_post_cont}>
+          <h1 className={styles.heading}>Create Blood Drive</h1>
+          <h3>Donate Today, Save Tomorrow</h3>
+          <form onSubmit={handleSubmit} className={styles.formContainer}>
+            <label>Title:</label>
+            <input type="text" ref={titleRef} required />
 
-          <label>Organizer:</label>
-          <input type="text" ref={organizerRef} required />
+            <label>Organizer:</label>
+            <input type="text" ref={organizerRef} required />
 
-          <div className={styles.autocomplete}>
-            <label>Location:</label>
-            <input
-              type="text"
-              ref={locationRef}
-              value={location}
-              onChange={handleLocationChange}
-              required
-            />
-            {suggestions.length > 0 && (
-              <ul className={styles.suggestionsList}>
-                {suggestions.map((suggestion) => (
-                  <li
-                    key={suggestion.place_id}
-                    className={styles.suggestionItem}
-                    onClick={() => handleSuggestionClick(suggestion)}
-                  >
-                    {suggestion.display_name}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+            <div className={styles.autocomplete}>
+              <label>Location:</label>
+              <input
+                type="text"
+                ref={locationRef}
+                value={location}
+                onChange={handleLocationChange}
+                required
+              />
+              {suggestions.length > 0 && (
+                <ul className={styles.suggestionsList}>
+                  {suggestions.map((suggestion) => (
+                    <li
+                      key={suggestion.place_id}
+                      className={styles.suggestionItem}
+                      onClick={() => handleSuggestionClick(suggestion)}
+                    >
+                      {suggestion.display_name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
-          <label>Date:</label>
-          <input type="date" ref={dateRef} required />
+            <label>Date:</label>
+            <input type="date" ref={dateRef} required />
 
-          <label>Start Time:</label>
-          <input type="time" ref={startTimeRef} required />
-          <label>End Time:</label>
-          <input type="time" ref={endTimeRef} required />
+            <label>Start Time:</label>
+            <input type="time" ref={startTimeRef} required />
+            <label>End Time:</label>
+            <input type="time" ref={endTimeRef} required />
 
-          <label>Poster (URL):</label>
-          <input type="text" ref={posterRef} />
+            <label>Poster (URL):</label>
+            <input type="text" ref={posterRef} />
 
-          <label>Description:</label>
-          <textarea ref={descriptionRef} />
+            <label>Description:</label>
+            <textarea ref={descriptionRef} />
 
-          <h3>Contact Information</h3>
-          <label>Name:</label>
-          <input type="text" ref={contactNameRef} />
+            <h3>Contact Information</h3>
+            <label>Name:</label>
+            <input type="text" ref={contactNameRef} />
 
-          <label>Phone:</label>
-          <input type="text" ref={contactPhoneRef} />
+            <label>Phone:</label>
+            <input type="text" ref={contactPhoneRef} />
 
-          <label>Email:</label>
-          <input type="email" ref={contactEmailRef} />
+            <label>Email:</label>
+            <input type="email" ref={contactEmailRef} />
 
-          <button type="submit" className={styles.submitButton}>
-            Submit
-          </button>
-        </form>
+            <button type="submit" className={styles.submitButton}>
+              Submit
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
     </>
   );
 };

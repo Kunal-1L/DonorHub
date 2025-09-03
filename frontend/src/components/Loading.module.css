@@ -1,10 +1,19 @@
 .loading_container {
+  background-color: rgba(0, 0, 0, 0.3);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000000;
+  max-width: 100%;
+  margin: 0 !important;
   display: flex;
-  justify-content: center;
   align-items: center;
-  margin-top: 15rem;
-  margin-bottom: 15rem;
-  position: relative;
-  overflow: hidden;
 }
 
+.spinner_custom {
+  margin: 0 auto;
+  width: 6rem;
+  height: 6rem;
+}

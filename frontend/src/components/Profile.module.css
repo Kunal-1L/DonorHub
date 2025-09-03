@@ -26,7 +26,6 @@
   margin-bottom: 30px;
 }
 
-
 .profileImg img {
   width: 150px;
   height: 190px;
@@ -36,7 +35,7 @@
   background-color: #443535;
 }
 
-.profileImg img:hover{
+.profileImg img:hover {
   transition-duration: 250ms;
   transition-property: all;
   transition-timing-function: ease-in-out;

@@ -8,10 +8,8 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const Emergency = () => {
   const navigate = useNavigate();
   const userData = JSON.parse(sessionStorage.getItem("userData"));
-  if (!userData) {
-    navigate("/login");
-    return;
-  }
+  if (userData === null) navigate("/login");
+
   const bloodGroupRef = useRef();
   const contactNameRef = useRef();
   const contactPhoneRef = useRef();
@@ -31,7 +29,7 @@ const Emergency = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${userData?.token}`,
           },
-        }
+        },
       );
 
       if (response.status === 200) {
@@ -81,7 +79,7 @@ const Emergency = () => {
     if (inputValue.length > 2) {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/location-suggestions?q=${inputValue}`
+          `${API_BASE_URL}/location-suggestions?q=${inputValue}`,
         );
         setSuggestions(response.data || []);
       } catch (error) {
@@ -94,8 +92,6 @@ const Emergency = () => {
 
   return (
     <>
-                  <ExpiryTokenCheck />
-
       <title>Emergency Blood</title>
       <div className={styles.container}>
         <div className={styles.drive_post_cont}>

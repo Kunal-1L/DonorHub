@@ -27,7 +27,7 @@
 .formContainer {
   width: 100%;
 }
-.container{
+.container {
   margin-top: 40px;
   text-align: center;
   padding: 40px;
@@ -35,7 +35,11 @@
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  background-image: linear-gradient(to bottom, rgb(255, 255, 255) 45%, #fcb69f 100%);
+  background-image: linear-gradient(
+    to bottom,
+    rgb(255, 255, 255) 45%,
+    #fcb69f 100%
+  );
 }
 form label {
   display: block;
@@ -107,8 +111,8 @@ form textarea:focus {
   form textarea {
     width: calc(100% - 12px);
   }
-  .container{
-    padding-left:5px;
-    padding-right:5px;
+  .container {
+    padding-left: 5px;
+    padding-right: 5px;
   }
 }

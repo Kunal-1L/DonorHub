@@ -9,7 +9,7 @@
   );
 }
 
-.not_found{
+.not_found {
   min-height: 50vh;
 }
 
@@ -39,9 +39,8 @@
 .detailLabel {
   color: #007bff;
   margin-right: 10px;
-  font-weight:700;
+  font-weight: 700;
 }
-
 
 .reg_btn {
   background-color: #27ae60;
@@ -51,7 +50,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-top:10px;
+  margin-top: 10px;
   margin-bottom: 20px;
   margin-right: 20px;
   font-size: 1rem;

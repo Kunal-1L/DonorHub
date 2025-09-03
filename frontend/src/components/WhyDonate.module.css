@@ -26,7 +26,9 @@
   position: relative;
   opacity: 0;
   transform: translateX(-30px);
-  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  transition:
+    opacity 0.5s ease-in-out,
+    transform 0.5s ease-in-out;
 }
 
 .bottom_section h3 {

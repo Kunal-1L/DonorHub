@@ -75,7 +75,7 @@ const LogIn = () => {
           headers: {
             Authorization: `Bearer ${userData.token}`,
           },
-        }
+        },
       );
     } catch (error) {
       console.error("Error saving token:", error);
@@ -111,35 +111,35 @@ const LogIn = () => {
   return (
     <div className={styles.background}>
       <title>LogIn</title>
-        <div className={styles.signup_container}>
-          <h2>Log In</h2>
-          <form onSubmit={handleSubmit} autoComplete="off">
-            <input
-              type="email"
-              ref={emailRef}
-              name="email"
-              placeholder="Enter your email"
-              required
-            />
-            <input
-              type="password"
-              ref={passwordRef}
-              name="password"
-              placeholder="Enter your password"
-              required
-            />
-            <button type="submit">Log In</button>
-          </form>
-          <div className={styles.shift_container}>
-            Don't have an account?{" "}
-            <a
-              style={{ color: "blue", marginLeft: "2px", cursor: "pointer" }}
-              onClick={handleSignUpClick}
-            >
-              Click Here
-            </a>
-          </div>
+      <div className={styles.signup_container}>
+        <h2>Log In</h2>
+        <form onSubmit={handleSubmit} autoComplete="off">
+          <input
+            type="email"
+            ref={emailRef}
+            name="email"
+            placeholder="Enter your email"
+            required
+          />
+          <input
+            type="password"
+            ref={passwordRef}
+            name="password"
+            placeholder="Enter your password"
+            required
+          />
+          <button type="submit">Log In</button>
+        </form>
+        <div className={styles.shift_container}>
+          Don't have an account?{" "}
+          <a
+            style={{ color: "blue", marginLeft: "2px", cursor: "pointer" }}
+            onClick={handleSignUpClick}
+          >
+            Click Here
+          </a>
         </div>
+      </div>
     </div>
   );
 };

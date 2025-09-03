@@ -42,7 +42,7 @@ const SignUp = () => {
 
     if (!passwordPattern.test(passwordRef.current.value)) {
       toast.info(
-        "Password must be at least 8 characters long and include at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character."
+        "Password must be at least 8 characters long and include at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.",
       );
       return;
     }
@@ -61,44 +61,44 @@ const SignUp = () => {
   };
 
   return (
-    <div className={styles.background} >
+    <div className={styles.background}>
       <title>SignUp</title>
-        <div className={styles.signup_container}>
-          <h2>Sign Up</h2>
-          <form onSubmit={handleSubmit} autoComplete="off">
-            <input
-              type="email"
-              ref={emailRef}
-              name="email"
-              placeholder="Enter your email"
-              required
-            />
-            <input
-              type="password"
-              ref={passwordRef}
-              name="password"
-              placeholder="Enter your password"
-              required
-            />
-            <div>
-              <select ref={roleRef} name="role">
-                <option value="User">User</option>
-                <option value="Hospital">Hospital</option>
-                <option value="Admin">Admin</option>
-              </select>
-            </div>
-            <button type="submit">Sign Up</button>
-          </form>
-          <div className={styles.shift_container}>
-            Already have an account?{" "}
-            <span
-              style={{ color: "blue", marginLeft: "2px", cursor: "pointer" }}
-              onClick={handleLoginClick}
-            >
-              Click Here
-            </span>
+      <div className={styles.signup_container}>
+        <h2>Sign Up</h2>
+        <form onSubmit={handleSubmit} autoComplete="off">
+          <input
+            type="email"
+            ref={emailRef}
+            name="email"
+            placeholder="Enter your email"
+            required
+          />
+          <input
+            type="password"
+            ref={passwordRef}
+            name="password"
+            placeholder="Enter your password"
+            required
+          />
+          <div>
+            <select ref={roleRef} name="role">
+              <option value="User">User</option>
+              <option value="Hospital">Hospital</option>
+              <option value="Admin">Admin</option>
+            </select>
           </div>
+          <button type="submit">Sign Up</button>
+        </form>
+        <div className={styles.shift_container}>
+          Already have an account?{" "}
+          <span
+            style={{ color: "blue", marginLeft: "2px", cursor: "pointer" }}
+            onClick={handleLoginClick}
+          >
+            Click Here
+          </span>
         </div>
+      </div>
     </div>
   );
 };

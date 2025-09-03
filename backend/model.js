@@ -32,7 +32,7 @@ const hospitalProfileSchema = new mongoose.Schema({
 
 const HospitalProfile = mongoose.model(
   "HospitalProfile",
-  hospitalProfileSchema
+  hospitalProfileSchema,
 );
 
 const BloodDriveSchema = new mongoose.Schema({
@@ -93,7 +93,7 @@ const DonorRegistrationSchema = new mongoose.Schema({
 
 const DonorRegistration = mongoose.model(
   "DonorRegistration",
-  DonorRegistrationSchema
+  DonorRegistrationSchema,
 );
 
 const NotificationTokensSchema = new mongoose.Schema({
@@ -103,7 +103,7 @@ const NotificationTokensSchema = new mongoose.Schema({
 
 const NotificationTokens = mongoose.model(
   "NotificationTokens",
-  NotificationTokensSchema
+  NotificationTokensSchema,
 );
 
 const EmergencyBloodRequestSchema = new mongoose.Schema({
@@ -121,7 +121,7 @@ const EmergencyBloodRequestSchema = new mongoose.Schema({
 
 const EmergencyBloodRequest = mongoose.model(
   "EmergencyBloodRequest",
-  EmergencyBloodRequestSchema
+  EmergencyBloodRequestSchema,
 );
 
 const DonorRequestSchema = new mongoose.Schema({
@@ -153,16 +153,6 @@ const DonorCallSchema = new mongoose.Schema({
 
 const DonorCall = mongoose.model("DonorCall", DonorCallSchema);
 
-const DriveRegistrationSchema = new mongoose.Schema({
-  driveId: { type: String, required: true, unique: true },
-  registeredDonor: [{ type: String, required: true }],
-});
-
-const DriveRegistration = mongoose.model(
-  "DriveRegistration",
-  DriveRegistrationSchema
-);
-
 module.exports = {
   Users,
   UserProfile,
@@ -173,5 +163,4 @@ module.exports = {
   EmergencyBloodRequest,
   DonorRequest,
   DonorCall,
-  DriveRegistration
 };

@@ -15,7 +15,7 @@ const WhyDonate = () => {
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.2 },
     );
 
     listRef.current.forEach((el) => {

@@ -49,13 +49,12 @@ const Home = () => {
     return () => clearTimeout(sloganTimeout);
   }, []);
 
-
   const getRandomIndices = (prevIndices) => {
     let newIndices = new Set();
 
     while (newIndices.size < 3) {
       const randomIndex = Math.floor(
-        Math.random() * bloodDonationSlogans.length
+        Math.random() * bloodDonationSlogans.length,
       );
       if (!prevIndices.includes(randomIndex)) {
         newIndices.add(randomIndex);
@@ -95,15 +94,24 @@ const Home = () => {
             <h1 className={styles.i1}>Donate Blood, </h1>
             <h1 className={styles.i2}>Make a Difference</h1>
           </div>
-          <Lottie animationData={dashAni} loop={true} className={styles.lottieAnimation}/>
-
+          <Lottie
+            animationData={dashAni}
+            loop={true}
+            className={styles.lottieAnimation}
+          />
         </div>
       )}
 
       <div className={styles.app_info}>
-        <div onClick={handleEmergency}>Emergency Blood Request<div className={styles.underline}></div></div>
-        <div onClick={handleHostDrives}>Host Blood Drives<div className={styles.underline}></div></div>
-        <div onClick={handleExploreDrives}>Explore Drives<div className={styles.underline}></div></div>
+        <div onClick={handleEmergency}>
+          Emergency Blood Request<div className={styles.underline}></div>
+        </div>
+        <div onClick={handleHostDrives}>
+          Host Blood Drives<div className={styles.underline}></div>
+        </div>
+        <div onClick={handleExploreDrives}>
+          Explore Drives<div className={styles.underline}></div>
+        </div>
       </div>
       <div className={styles.slogans}>
         {sloganIndices.map((index) => (

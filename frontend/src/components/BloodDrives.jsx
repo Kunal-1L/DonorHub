@@ -15,12 +15,16 @@ const BloodDrives = () => {
   const [loading, setLoading] = useState(true);
   const [isDriveDetailsVisible, setIsDriveDetailsVisible] = useState(false);
 
-  if (!userData) {
-    navigate("/login");
-  }
+  useEffect(() => {
+    if (userData === null) {
+      toast.warning("Please Login First");
+      navigate("/login");
+    }
+  }, []);
   useEffect(() => {
     const fetchBloodDrives = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(`${API_BASE_URL}/blood-drives`, {
           headers: {
             Authorization: `Bearer ${userData?.token}`,
@@ -48,7 +52,7 @@ const BloodDrives = () => {
         setLoading(false);
       }
     };
-    fetchBloodDrives();
+    userData && fetchBloodDrives();
   }, [userData?.token]);
 
   const handleOutsideClick = (event) => {
@@ -76,7 +80,7 @@ const BloodDrives = () => {
   };
 
   if (loading) {
-    return <Loading />;
+    <Loading />;
   }
 
   const handleDriveClick = (index, event) => {
@@ -91,27 +95,37 @@ const BloodDrives = () => {
         </h2>
         <p><strong>Organizer:</strong> ${drive.organizer}</p>
         
-        <p><strong>Location:</strong> ${<a href={`https://www.google.com/maps?q=${encodeURIComponent(drive.location)}`} target="_blank">
-        </a>}</p>
+        <p><strong>Location:</strong> ${(
+          <a
+            href={`https://www.google.com/maps?q=${encodeURIComponent(
+              drive.location,
+            )}`}
+            target="_blank"
+          ></a>
+        )}</p>
         <p><strong>Date:</strong> ${new Date(
-          drive.date
+          drive.date,
         ).toLocaleDateString()}</p>
-        <p><strong>Time:</strong> ${drive.time.startTime} - ${drive.time.endTime
+        <p><strong>Time:</strong> ${drive.time.startTime} - ${
+          drive.time.endTime
         }</p>
-        ${drive.poster
-          ? `<img src="${drive.poster}" alt="Drive Poster" style="max-width: 300px;"/>`
-          : ""
+        ${
+          drive.poster
+            ? `<img src="${drive.poster}" alt="Drive Poster" style="max-width: 300px;"/>`
+            : ""
         }
-        <p><strong>Description:</strong> ${drive.description || "No description provided."
+        <p><strong>Description:</strong> ${
+          drive.description || "No description provided."
         }</p>
-        ${drive.contact
-          ? `
+        ${
+          drive.contact
+            ? `
           <h3>Contact Information</h3>
           <p><strong>Name:</strong> ${drive.contact.name || "N/A"}</p>
           <p><strong>Phone:</strong> ${drive.contact.phone || "N/A"}</p>
           <p><strong>Email:</strong> ${drive.contact.email || "N/A"}</p>
         `
-          : ""
+            : ""
         }
       `;
       detailsContainer.className = styles.drive_details;
@@ -139,7 +153,7 @@ const BloodDrives = () => {
           headers: {
             Authorization: `Bearer ${userData?.token}`,
           },
-        }
+        },
       );
       toast.success(response.data.message);
       navigate("/why-donate");
@@ -170,11 +184,10 @@ const BloodDrives = () => {
   const handleMyDrives = () => {
     if (!userData) {
       navigate("/login");
-    }
-    else {
+    } else {
       navigate("/my-drives");
     }
-  }
+  };
   return (
     <>
       <title>Blood Drives</title>
@@ -227,7 +240,9 @@ const BloodDrives = () => {
             </div>
           ))
         ) : (
-          <div className={styles.not_found} style={{ fontSize: "20px" }}>No blood drives available near you.</div>
+          <div className={styles.not_found} style={{ fontSize: "20px" }}>
+            No blood drives available near you.
+          </div>
         )}
         {
           <div ref={divRef1} id="drive-details">
