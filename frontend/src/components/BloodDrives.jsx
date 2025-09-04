@@ -198,13 +198,13 @@ const BloodDrives = () => {
             "linear-gradient(to bottom,rgb(255, 255, 255) 25%,to #fcb69f 100%)",
         }}
       >
-        <button className={styles.post_btn} onClick={handlePostClick}>
+        <button className={styles.post_btn} onClick={() => handlePostClick()}>
           Post Blood Drive
         </button>
-        <button className={styles.post_btn} onClick={handleEmergencyClick}>
+        <button className={styles.post_btn} onClick={() => handleEmergencyClick()}>
           Emergency Blood
         </button>
-        <button className={styles.post_btn} onClick={handleMyDrives()}>
+        <button className={styles.post_btn} onClick={() => handleMyDrives()}>
           My Drives
         </button>
         {drives.length > 0 ? (
