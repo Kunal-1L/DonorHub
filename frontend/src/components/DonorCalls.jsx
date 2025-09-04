@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import Loading from "./Loading";
 import styles from "./DonorCalls.module.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,14 +7,16 @@ import "react-toastify/dist/ReactToastify.css";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const DonorCalls = () => {
-  const userData = JSON.parse(sessionStorage.getItem("userData"));
   const [donorCallsData, setDonorCallsData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
 
   useEffect(() => {
+    document.title = "Donor Calls";
+
     const fetchDonorCalls = async () => {
-      setLoading(true);
       try {
+        setLoading(true);
         const response = await axios.get(`${API_BASE_URL}/donor-calls`, {
           headers: {
             Authorization: `Bearer ${userData?.token}`,
@@ -28,8 +29,9 @@ const DonorCalls = () => {
         setLoading(false);
       }
     };
+
     fetchDonorCalls();
-  }, [userData?.token]);
+  }, []);
 
   const handleReqRes = async (request_id) => {
     try {
@@ -38,82 +40,71 @@ const DonorCalls = () => {
         { request_id },
         {
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${userData?.token}`,
           },
-        },
+        }
       );
-      toast.success(response.message);
+      toast.success(response.data?.message || "Request responded successfully");
     } catch (error) {
-      toast.error("Error fetching donor calls");
+      toast.error("Error responding to donor request");
     } finally {
       setLoading(false);
     }
   };
 
-  if (!donorCallsData) {
-    return (
-      <div
-        className={styles.container}
-        style={{ minHeight: "50vh", fontSize: "20px" }}
-      >
-        No donor call information available.
-      </div>
-    );
-  }
-
-  const { request } = donorCallsData;
-
   return (
-    <>
-      <title>Donor Calls</title>
-      <div className={styles.container}>
-        <h1>Donor Calls</h1>
-        {request && request.length > 0 ? (
-          <ul className={styles.requestList}>
-            {request.map((req) => (
-              <li key={req._id} className={styles.requestItem}>
-                <div className={styles.requestDetails}>
-                  <p>
-                    <span className={styles.detailLabel}>Blood Group:</span>{" "}
-                    {req.bloodGroup}
-                  </p>
-                  <p>
-                    <span className={styles.detailLabel}>Location:</span>{" "}
-                    <a
-                      href={`https://www.google.com/maps?q=${encodeURIComponent(drive.location)}`}
-                      target="_blank"
-                    ></a>
-                  </p>
-                  <p>
-                    <span className={styles.detailLabel}>Contact Name:</span>{" "}
-                    {req.contact.contactName}
-                  </p>
-                  <p>
-                    <span className={styles.detailLabel}>Contact Phone:</span>{" "}
-                    {req.contact.contactPhone}
-                  </p>
-                  <p>
-                    <span className={styles.detailLabel}>Request Date:</span>{" "}
-                    {new Date(req.createdAt).toLocaleDateString()}
-                  </p>
-                  <button
-                    className={styles.reg_btn}
-                    onClick={() => handleReqRes(req._id)}
+    <div className={styles.background}>
+      <h1>Donor Requests</h1>
+      {loading ? (
+        <div className={styles.loading}>Loading donor calls...</div>
+      ) : (
+        <div className={styles.drivesList}>
+          {donorCallsData?.request?.length > 0 ? (
+            donorCallsData.request.map((req) => (
+              <div key={req._id} className={styles.driveCard}>
+                <h2>Donor Request</h2>
+                <p>
+                  <span>Blood Group: </span>
+                  {req.bloodGroup}
+                </p>
+                <p>
+                  <span>Location: </span>
+                  <a
+                    href={`https://www.google.com/maps?q=${encodeURIComponent(
+                      req.location
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    Respond To Request
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className={styles.not_found} style={{ fontSize: "20px" }}>
-            {donorCallsData.message || "No active donor calls found."}
-          </div>
-        )}
-      </div>
-    </>
+                    {req.location}
+                  </a>
+                </p>
+                <p>
+                  <span>Contact Name: </span>
+                  {req.contact?.contactName}
+                </p>
+                <p>
+                  <span>Contact Phone: </span>
+                  {req.contact?.contactPhone}
+                </p>
+                <p>
+                  <span>Request Date: </span>
+                  {new Date(req.createdAt).toLocaleDateString()}
+                </p>
+                <button
+                  className={styles.reg_btn}
+                  onClick={() => handleReqRes(req._id)}
+                >
+                  Respond To Request
+                </button>
+              </div>
+            ))
+          ) : (
+            <div className={styles.noDrives}>No donor requests found</div>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 

@@ -204,7 +204,7 @@ const BloodDrives = () => {
         <button className={styles.post_btn} onClick={handleEmergencyClick}>
           Emergency Blood
         </button>
-        <button className={styles.post_btn} onClick={() => handleMyDrives()}>
+        <button className={styles.post_btn} onClick={handleMyDrives()}>
           My Drives
         </button>
         {drives.length > 0 ? (

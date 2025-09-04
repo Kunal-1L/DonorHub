@@ -13,6 +13,8 @@ const DonorResponses = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    document.title = "Donor Responses";
+
     const fetchDonorResponse = async () => {
       setLoading(true);
       try {
@@ -29,52 +31,45 @@ const DonorResponses = () => {
         setLoading(false);
       }
     };
-    fetchDonorResponse();
-  }, [userData?.token]);
 
-  if (!donorResponseData || donorResponseData.length === 0) {
-    return (
-      <div className={styles.background}>
-        <h1>Donor Responses</h1>
-        <div
-          className={styles.container}
-          style={{ minHeight: "50vh", fontSize: "20px" }}
-        >
-          No donor responses available.
-        </div>
-      </div>
-    );
-  }
+    fetchDonorResponse();
+  }, []);
 
   return (
     <div className={styles.background}>
       <h1>Donor Responses</h1>
-      <ul className={styles.requestList}>
-        {donorResponseData.map((res) => (
-          <li key={res._id} className={styles.requestItem}>
-            <div className={styles.requestDetails}>
+
+      {loading ? (
+        <Loading />
+      ) : donorResponseData && donorResponseData.length > 0 ? (
+        <div className={styles.drivesList}>
+          {donorResponseData.map((res) => (
+            <div key={res._id} className={styles.driveCard}>
+              <h2>{res.name}</h2>
               <p>
-                <span className={styles.detailLabel}>Name:</span> {res.name}
-              </p>
-              <p>
-                <span className={styles.detailLabel}>Blood Group:</span>{" "}
-                {res.bloodGroup}
+                <span className={styles.detailLabel}>Blood Group:</span> {res.bloodGroup}
               </p>
               <p>
                 <span className={styles.detailLabel}>Location:</span>{" "}
                 <a
-                  href={`https://www.google.com/maps?q=${encodeURIComponent(drive.location)}`}
+                  href={`https://www.google.com/maps?q=${encodeURIComponent(res.location)}`}
                   target="_blank"
-                ></a>
+                  rel="noopener noreferrer"
+                >
+                  {res.location}
+                </a>
               </p>
               <p>
-                <span className={styles.detailLabel}>Contact Number:</span>{" "}
-                {res.phone}
+                <span className={styles.detailLabel}>Contact Number:</span> {res.phone}
               </p>
             </div>
-          </li>
-        ))}
-      </ul>
+          ))}
+        </div>
+      ) : (
+        <div className={styles.noDrives} style={{ fontSize: "20px", minHeight: "50vh" }}>
+          No donor responses available.
+        </div>
+      )}
     </div>
   );
 };

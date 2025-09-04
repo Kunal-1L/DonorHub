@@ -118,7 +118,7 @@ app.get("/location-suggestions", async (req, res) => {
           limit: 5,
           format: "json",
         },
-      },
+      }
     );
 
     if (!response.data || response.data.length === 0) {
@@ -129,7 +129,7 @@ app.get("/location-suggestions", async (req, res) => {
   } catch (error) {
     console.error(
       "Error fetching LocationIQ suggestions:",
-      error.response?.data || error.message,
+      error.response?.data || error.message
     );
     res.status(500).json({ error: "Error fetching location suggestions" });
   }
@@ -190,7 +190,7 @@ app.post("/profile", verifyToken, async (req, res) => {
       `https://us1.locationiq.com/v1/search.php`,
       {
         params: { key: LOCATIONIQ_API_KEY, q: location, format: "json" },
-      },
+      }
     );
 
     if (response.data.length === 0) {
@@ -210,7 +210,7 @@ app.post("/profile", verifyToken, async (req, res) => {
       });
       await Users.updateOne(
         { user_id: req.user_id },
-        { $set: { profile_completed: true } },
+        { $set: { profile_completed: true } }
       );
       await profile.save();
       res.status(200).json({ message: "User Profile Created", profile });
@@ -226,7 +226,7 @@ app.post("/profile", verifyToken, async (req, res) => {
       await profile.save();
       await Users.updateOne(
         { user_id: req.user_id },
-        { $set: { profile_completed: true } },
+        { $set: { profile_completed: true } }
       );
       res.status(200).json({ message: "Hospital Profile Created", profile });
     }
@@ -314,7 +314,7 @@ app.post("/post-drive", verifyToken, async (req, res) => {
       "https://us1.locationiq.com/v1/search.php",
       {
         params: { key: LOCATIONIQ_API_KEY, q: location, format: "json" },
-      },
+      }
     );
 
     if (response.data.length === 0) {
@@ -353,7 +353,7 @@ app.post("/donor-registration", verifyToken, async (req, res) => {
         await DonorRegistration.findOneAndUpdate(
           { driveId },
           { $addToSet: { registeredDonor: donorId } },
-          { new: true, upsert: true },
+          { new: true, upsert: true }
         );
       } else {
         res.status(200).json({ message: "You are already registered..." });
@@ -381,23 +381,19 @@ app.get("/my-drives", verifyToken, async (req, res) => {
         location: 1,
         time: 1,
         date: 1,
-      },
+      }
     );
-    const result = await DonorRegistration.aggregate([
-      { $match: { user_id } },
-      {
-        $project: {
-          driveId: 1,
-          registeredDonorCount: { $size: "$registeredDonor" },
-        },
-      },
-    ]);
-
-    if (drives.length === 0) {
-      return res.status(200).json({ message: "No drives found for this user" });
+    let result = [];
+    for (const drive of drives) {
+      const temp = await DonorRegistration.findOne({ driveId: drive._id });
+      if(temp)
+        result.push(temp.registeredDonor.length)
+      else
+        result.push(0)
     }
     res.status(200).json([drives, result]);
   } catch (error) {
+    console.error("Error fetching user's drives:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -410,7 +406,7 @@ app.post("/save-token", verifyToken, async (req, res) => {
     await NotificationTokens.findOneAndUpdate(
       { user_id },
       { $set: { token: token } },
-      { new: true, upsert: true },
+      { new: true, upsert: true }
     );
     res.status(200).json({ message: "Successfully done" });
   } catch (error) {
@@ -514,7 +510,7 @@ app.post("/emergency-push", verifyToken, async (req, res) => {
         `https://us1.locationiq.com/v1/search.php`,
         {
           params: { key: LOCATIONIQ_API_KEY, q: location, format: "json" },
-        },
+        }
       );
 
       if (response.data.length === 0) {
@@ -531,12 +527,12 @@ app.post("/emergency-push", verifyToken, async (req, res) => {
           userLat,
           userLon,
           user.latitude,
-          user.longitude,
+          user.longitude
         );
 
         const isCompatible = isBloodCompatible(
           user.bloodGroup,
-          info.bloodGroup,
+          info.bloodGroup
         );
 
         return distance <= 10 && isCompatible;
@@ -580,10 +576,10 @@ app.post("/emergency-push", verifyToken, async (req, res) => {
           } catch (error) {
             console.error(
               `Error updating/creating DonorRequest for user ${nearbyUserId}:`,
-              error,
+              error
             );
           }
-        }),
+        })
       );
 
       const tokens = await NotificationTokens.find({
@@ -599,13 +595,13 @@ app.post("/emergency-push", verifyToken, async (req, res) => {
             token.token,
             notificationTitle,
             notificationBody,
-            { location: info.location, bloodGroup: info.bloodGroup },
+            { location: info.location, bloodGroup: info.bloodGroup }
           );
           return response;
         } catch (error) {
           console.error(
             `Error sending notification to ${token.user_id} (${token.token}):`,
-            error,
+            error
           );
           return null;
         }
@@ -616,7 +612,7 @@ app.post("/emergency-push", verifyToken, async (req, res) => {
     } catch (locationError) {
       console.error(
         "Error fetching coordinates from LocationIQ:",
-        locationError,
+        locationError
       );
       return res.status(500).json({
         message: "Error fetching location coordinates",
@@ -653,10 +649,10 @@ app.get("/donor-calls", verifyToken, async (req, res) => {
       await DonorRequest.findOneAndUpdate(
         { user_id: user_id },
         { $pull: { request: { $in: expiredRequestIds } } },
-        { new: true },
+        { new: true }
       );
       donorRequest = await DonorRequest.findOne({ user_id: user_id }).populate(
-        "request",
+        "request"
       );
     }
 
@@ -699,7 +695,7 @@ app.post("/donor-req-res", verifyToken, async (req, res) => {
     await donorCall.save();
 
     res.status(200).json({
-      message: "Your response is submitted and now caller contact you further",
+      message: "Your response is recorded and now caller contact you further",
     });
   } catch (error) {
     console.error("Error in /donor-req-res:", error);
@@ -714,7 +710,7 @@ app.get("/donor-responses", verifyToken, async (req, res) => {
     if (!donorCall) {
       return res
         .status(200)
-        .json({ message: "No donor call found for this user." });
+        .json({ message: "No donor call found" });
     }
 
     const responses = donorCall.requested_user_id
@@ -741,5 +737,5 @@ app.get("/dashboard", verifyToken, (req, res) => {
 // Start Server
 const PORT = 8000;
 app.listen(PORT, () =>
-  console.log(`🚀 Server running on http://localhost:${PORT}`),
+  console.log(`🚀 Server running on http://localhost:${PORT}`)
 );
